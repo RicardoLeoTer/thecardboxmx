@@ -104,7 +104,7 @@ export default function App() {
     { name: 'Mimikyu', set: 'Destined Rivals',image: '/images/TEAMRMIMIKYU.jpg', tag: 'Alt Art', glow: 'rgba(138,111,194,0.4)' },
     { name: 'Froakie', set: 'Ninja Spinner', image: '/images/FROAKIE.jpg', tag: 'Alt Art Japanese', glow: 'rgba(138,111,194,0.4)' },
     { name: 'Frogadier', set: 'Ninja Spinner', image: '/images/FROGADIER.jpg', tag: 'Alt Art Japanese', glow: 'rgba(138,111,194,0.4)' },
-    { name: 'Psyduck', set: 'Mega Dream ex', image: '/images/PSYDUCK.jpg', tag: 'Alt Art Japanese', glow: 'rgba(138,111,194,0.4)' },
+    { name: 'Psyduck', set: 'Mega Dream ex', image: '/images/PYSDUCK.jpg', tag: 'Alt Art Japanese', glow: 'rgba(138,111,194,0.4)' },
     { name: 'Murkrow', set: 'The Glory Of Team Rocket', image: '/images/TEAMRMURK.jpg', tag: 'Alt Art Japanese', glow: 'rgba(138,111,194,0.4)' },
     { name: 'Eevee', set: 'Top Sun',image: '/images/EEVEETOPSUN.jpg', tag: 'Vintage', glow: 'rgba(138,111,194,0.4)' },
     { name: 'Jolteon', set: 'Top Sun',image: '/images/JOLTEONTOPSUN.jpg', tag: 'Vintage', glow: 'rgba(138,111,194,0.4)' },
