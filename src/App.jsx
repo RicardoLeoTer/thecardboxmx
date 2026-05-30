@@ -96,9 +96,19 @@ export default function App() {
   };
 
   const featured = [
-    { name: 'Charizard ex', set: 'Obsidian Flames', emoji: '🔥', tag: 'Más buscada', glow: 'rgba(224,92,42,0.4)' },
-    { name: 'Umbreon VMAX', set: 'Evolving Skies', emoji: '🌙', tag: 'Alt Art', glow: 'rgba(138,111,194,0.4)' },
-    { name: 'Gengar ex', set: 'Phantom Forces', emoji: '👻', tag: 'Edición limitada', glow: 'rgba(138,111,194,0.4)' },
+    { name: 'Mega Charizard EX', set: 'Phantasmal Flames', image: '/images/MEGACHARIZARDEX.jpg', tag: 'Más buscada', glow: 'rgba(224,92,42,0.4)' },
+   { name: 'Charmander', set: 'Top Sun',image: '/images/CHARMANDERTOPSUN.jpg', tag: 'Vintage', glow: 'rgba(138,111,194,0.4)' },
+    { name: 'Pikachu', set: '25th Anniversary',image: '/images/BIRTHDAYPIKA.jpg', tag: 'Edición limitada', glow: 'rgba(138,111,194,0.4)' },
+    { name: 'Entei', set: 'Crown Zenith',image: '/images/ENTEIV.jpg', tag: 'Alt Art', glow: 'rgba(138,111,194,0.4)' },
+    { name: 'Bulbasaur', set: 'Stellar Crown',image: '/images/SLEEPYBULBASAUR.jpg', tag: 'Alt Art', glow: 'rgba(138,111,194,0.4)' },
+    { name: 'Mimikyu', set: 'Destined Rivals',image: '/images/TEAMRMIMIKYU.jpg', tag: 'Alt Art', glow: 'rgba(138,111,194,0.4)' },
+    { name: 'Froakie', set: 'Ninja Spinner', image: '/images/FROAKIE.jpg', tag: 'Alt Art Japanese', glow: 'rgba(138,111,194,0.4)' },
+    { name: 'Frogadier', set: 'Ninja Spinner', image: '/images/FROGADIER.jpg', tag: 'Alt Art Japanese', glow: 'rgba(138,111,194,0.4)' },
+    { name: 'Psyduck', set: 'Mega Dream ex', image: '/images/PSYDUCK.jpg', tag: 'Alt Art Japanese', glow: 'rgba(138,111,194,0.4)' },
+    { name: 'Murkrow', set: 'The Glory Of Team Rocket', image: '/images/TEAMRMURK.jpg', tag: 'Alt Art Japanese', glow: 'rgba(138,111,194,0.4)' },
+    { name: 'Eevee', set: 'Top Sun',image: '/images/EEVEETOPSUN.jpg', tag: 'Vintage', glow: 'rgba(138,111,194,0.4)' },
+    { name: 'Jolteon', set: 'Top Sun',image: '/images/JOLTEONTOPSUN.jpg', tag: 'Vintage', glow: 'rgba(138,111,194,0.4)' },
+    { name: 'Blastoise', set: 'Top Sun',image: '/images/BLASTOISETOPSUN.jpg', tag: 'Vintage', glow: 'rgba(138,111,194,0.4)' },
   ];
 
   return (
