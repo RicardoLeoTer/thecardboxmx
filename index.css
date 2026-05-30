@@ -1,15 +1,20 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import Catalog from './pages/Catalog';
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-export default function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/catalogo" element={<Catalog />} />
-      </Routes>
-    </BrowserRouter>
-  );
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #060608;
+  font-family: 'Manrope', 'Helvetica Neue', Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
 }
