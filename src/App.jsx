@@ -337,8 +337,8 @@ export default function App() {
                 3 ganadores. Sobres, cartas EX y jumbo. El set que está subiendo de precio cada semana — y tú podrías llevártelo.
               </p>
               <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap', marginBottom: 36 }}>
-                <div><div className="font-display" style={{ fontSize: 36, fontWeight: 900, color: '#fff' }}>50</div><div className="font-body" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', letterSpacing: 1 }}>BOLETOS</div></div>
-                <div><div className="font-display" style={{ fontSize: 36, fontWeight: 900, color: '#fff' }}>$280</div><div className="font-body" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', letterSpacing: 1 }}>POR BOLETO</div></div>
+                <div><div className="font-display" style={{ fontSize: 36, fontWeight: 900, color: '#fff' }}>25</div><div className="font-body" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', letterSpacing: 1 }}>BOLETOS</div></div>
+                <div><div className="font-display" style={{ fontSize: 36, fontWeight: 900, color: '#fff' }}>$210</div><div className="font-body" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', letterSpacing: 1 }}>POR BOLETO</div></div>
                 <div><div className="font-display" style={{ fontSize: 36, fontWeight: 900, color: '#fff' }}>3</div><div className="font-body" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', letterSpacing: 1 }}>GANADORES</div></div>
               </div>
               <span className="btn font-body" style={{ display: 'inline-block', fontSize: 15, fontWeight: 800, color: C.azulAcento, background: '#fff', padding: '15px 36px', borderRadius: 100, boxShadow: '0 8px 30px rgba(0,0,0,0.3)' }}>
@@ -403,7 +403,7 @@ export default function App() {
             <span className="font-display" style={{ fontSize: 15, fontWeight: 600, color: C.platino }}>The Card Box MX</span>
           </div>
           <p className="font-body" style={{ fontSize: 12, color: '#506070' }}>
-            © 2026 The Card Box MX · <a href="https://instagram.com/thecarboxmx" target="_blank" rel="noopener noreferrer" style={{ color: '#506070', textDecoration: 'none' }}>@TheCardBoxMX</a> · Pokémon © Nintendo / GameFreak
+            © 2026 The Card Box MX · <a href="https://instagram.com/thecardboxmx" target="_blank" rel="noopener noreferrer" style={{ color: '#506070', textDecoration: 'none' }}>@TheCardBoxMX</a> · Pokémon © Nintendo / GameFreak
           </p>
         </div>
       </footer>
