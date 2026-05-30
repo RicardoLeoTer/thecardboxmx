@@ -219,7 +219,7 @@ export default function App() {
             opacity: heroLoaded ? 1 : 0, transform: heroLoaded ? 'translateY(0)' : 'translateY(30px)',
             transition: 'all 1s cubic-bezier(0.16,1,0.3,1) 0.2s',
           }}>
-            No solo vendemos cartas. Curamos las piezas que tu colección merece — auténticas, verificadas, y elegidas con el ojo de un coleccionista.
+            No solo vendemos cartas. Buscamos y cuidamos las piezas que tu colección merece — auténticas, verificadas, y elegidas con el ojo de un coleccionista.
           </p>
 
           <div style={{
@@ -303,8 +303,8 @@ export default function App() {
                   boxShadow: `0 20px 60px rgba(0,0,0,0.5)`,
                 }}>
                   {/* Card image area */}
-                  <div style={{ height: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', background: `radial-gradient(circle at 50% 40%, ${card.glow} 0%, transparent 65%)` }}>
-                    <div style={{ fontSize: 90, filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.4))' }}>{card.emoji}</div>
+                  <div style={{ height: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', background: `radial-gradient(circle at 50% 40%, ${card.glow} 0%, transparent 65%)`, overflow: 'hidden' }}>
+                    <img src={card.image} alt={card.name} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover', filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.4))' }} loading="lazy" />
                     <span className="font-body" style={{ position: 'absolute', top: 16, left: 16, fontSize: 11, fontWeight: 700, color: '#fff', background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)', padding: '6px 14px', borderRadius: 100, letterSpacing: 0.5, border: '1px solid rgba(255,255,255,0.15)' }}>
                       {card.tag}
                     </span>
