@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 
 // ============================================================
 // Hook: reveal on scroll (Intersection Observer = ligero, gama baja OK)
@@ -407,6 +408,7 @@ export default function App() {
           </p>
         </div>
       </footer>
+      <Analytics />
     </div>
   );
 }
