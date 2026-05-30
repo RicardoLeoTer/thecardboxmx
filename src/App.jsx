@@ -315,9 +315,9 @@ export default function App() {
                     <p className="font-body" style={{ fontSize: 14, color: C.acero, marginBottom: 20 }}>{card.set}</p>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span className="font-body" style={{ fontSize: 13, color: C.acero }}>Disponible</span>
-                      <span className="btn font-body" style={{ fontSize: 13, fontWeight: 700, color: C.platino, border: `1px solid rgba(192,204,216,0.25)`, padding: '8px 18px', borderRadius: 100 }}>
-                        Lo quiero →
-                      </span>
+                      <a href="#contacto" className="btn font-body" style={{ fontSize: 13, fontWeight: 700, color: C.platino, border: `1px solid rgba(192,204,216,0.25)`, padding: '8px 18px', borderRadius: 100, textDecoration: 'none', display: 'inline-block' }}>
+                          Lo quiero →
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -341,7 +341,7 @@ export default function App() {
                 🔥 Rifa activa
               </span>
               <h2 className="font-display" style={{ fontSize: 'clamp(32px, 6vw, 54px)', fontWeight: 900, color: '#fff', margin: '20px 0', lineHeight: 1.05, letterSpacing: -1 }}>
-                Mega EX Boxes<br />Ascended Heroes
+                Ascended Heroes<br />Próximamente...
               </h2>
               <p className="font-body" style={{ fontSize: 18, color: 'rgba(255,255,255,0.85)', lineHeight: 1.6, marginBottom: 32 }}>
                 3 ganadores. Sobres, cartas EX y jumbo. El set que está subiendo de precio cada semana — y tú podrías llevártelo.
@@ -379,7 +379,7 @@ export default function App() {
       </section>
 
       {/* ============ FINAL CTA ============ */}
-      <section style={{ padding: '120px 24px', background: C.negro, textAlign: 'center' }}>
+      <section id="contacto" style={{ padding: '120px 24px', background: C.negro, textAlign: 'center' }}>
         <Reveal>
           <Logo size={72} glow />
         </Reveal>
@@ -398,7 +398,7 @@ export default function App() {
             <a href="https://wa.me/525536513092" target="_blank" rel="noopener noreferrer" className="btn btn-primary font-body" style={{ width: '100%', textAlign: 'center', fontSize: 16, fontWeight: 800, color: '#fff', background: '#25D366', padding: '16px 36px', borderRadius: 100, textDecoration: 'none' }}>
               💬 WhatsApp
             </a>
-            <a href="https://instagram.com/thecarboxmx" target="_blank" rel="noopener noreferrer" className="btn btn-ghost font-body" style={{ width: '100%', textAlign: 'center', fontSize: 16, fontWeight: 700, color: C.platino, padding: '16px 36px', borderRadius: 100, border: `1px solid rgba(192,204,216,0.25)`, textDecoration: 'none' }}>
+            <a href="https://www.instagram.com/thecardboxmx?igsh=endjdmZ3cnU0MWFm&utm_source=Website" target="_blank" rel="noopener noreferrer" className="btn btn-ghost font-body" style={{ width: '100%', textAlign: 'center', fontSize: 16, fontWeight: 700, color: C.platino, padding: '16px 36px', borderRadius: 100, border: `1px solid rgba(192,204,216,0.25)`, textDecoration: 'none' }}>
               📱 @TheCardBoxMX
             </a>
           </div>
@@ -413,7 +413,7 @@ export default function App() {
             <span className="font-display" style={{ fontSize: 15, fontWeight: 600, color: C.platino }}>The Card Box MX</span>
           </div>
           <p className="font-body" style={{ fontSize: 12, color: '#506070' }}>
-            © 2026 The Card Box MX · <a href="https://instagram.com/thecardboxmx" target="_blank" rel="noopener noreferrer" style={{ color: '#506070', textDecoration: 'none' }}>@TheCardBoxMX</a> · Pokémon © Nintendo / GameFreak
+            © 2026 The Card Box MX · <a href="https://www.instagram.com/thecardboxmx?igsh=endjdmZ3cnU0MWFm&utm_source=Website" target="_blank" rel="noopener noreferrer" style={{ color: '#506070', textDecoration: 'none' }}>@TheCardBoxMX</a> · Cards & Collectibles Shop
           </p>
         </div>
       </footer>
