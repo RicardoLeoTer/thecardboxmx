@@ -53,23 +53,29 @@ export default function Catalog() {
     { name: 'Mega Charizard EX', set: 'Phantasmal Flames', pokemon: 'Charizard', image: '/images/MEGACHARIZARDEX.jpg', type: 'individual' },
     { name: 'Charmander', set: 'Top Sun', pokemon: 'Charmander', image: '/images/CHARMANDERTOPSUN.jpg', type: 'individual' },
     { name: 'Pikachu', set: '25th Anniversary', pokemon: 'Pikachu', image: '/images/BIRTHDAYPIKA.jpg', type: 'individual' },
-    { name: 'Entei', set: 'Crown Zenith', pokemon: 'Entei', image: '/images/ENTEI.jpg', type: 'individual' },
+    { name: 'Entei', set: 'Crown Zenith', pokemon: 'Entei', image: '/images/ENTEIV.jpg', type: 'individual' },
     { name: 'Bulbasaur', set: 'Stellar Crown', pokemon: 'Bulbasaur', image: '/images/SLEEPYBULBASAUR.jpg', type: 'individual' },
-    { name: 'Mimikyu', set: 'Destined Rivals', pokemon: 'Mimikyu', image: '/images/TEAMPRIMIKYU.jpg', type: 'individual' },
+    { name: 'Mimikyu', set: 'Destined Rivals', pokemon: 'Mimikyu', image: '/images/TEAMPRIMIMIKYU.jpg', type: 'individual' },
     { name: 'Froakie', set: 'Ninja Spinner', pokemon: 'Froakie', image: '/images/FROAKIE.jpg', type: 'individual' },
     { name: 'Frogadier', set: 'Ninja Spinner', pokemon: 'Frogadier', image: '/images/FROGADIER.jpg', type: 'individual' },
-    { name: 'Psyduck', set: 'Mega Dream ex', pokemon: 'Psyduck', image: '/images/PSYDUCK.jpg', type: 'individual' },
+    { name: 'Psyduck', set: 'Mega Dream ex', pokemon: 'Psyduck', image: '/images/PYSDUCK.jpg', type: 'individual' },
     { name: 'Murkrow', set: 'The Glory Of Team Rocket', pokemon: 'Murkrow', image: '/images/TEAMMURK.jpg', type: 'individual' },
     { name: 'Eevee', set: 'Top Sun', pokemon: 'Eevee', image: '/images/EEVEETOPSUN.jpg', type: 'individual' },
-    { name: 'Jolteon', set: 'Top Sun', pokemon: 'Jolteon', image: '/images/JOLTEON.jpg', type: 'individual' },
-    { name: 'Blastoise', set: 'Top Sun', pokemon: 'Blastoise', image: '/images/BLASTOSETOPSUN.jpg', type: 'individual' },
+    { name: 'Jolteon', set: 'Top Sun', pokemon: 'Jolteon', image: '/images/JOLTEONTOPSUN.jpg', type: 'individual' },
+    { name: 'Blastoise', set: 'Top Sun', pokemon: 'Blastoise', image: '/images/BLASTOISETOPSUN.jpg', type: 'individual' },
   ];
 
   // Closed products (boxes, collections, etc.)
   const closedProducts = [
-    { name: 'Ascended Heroes Mega EX Box', set: 'Ascended Heroes', pokemon: 'Pokémon TCG', price: 2500, image: '/images/MEGACHARIZARDEX.jpg', type: 'closed' },
-    { name: 'Stellar Crown Elite Trainer Box', set: 'Stellar Crown', pokemon: 'Pokémon TCG', price: 1800, image: '/images/SLEEPYBULBASAUR.jpg', type: 'closed' },
-    { name: 'Phantom Flames Booster Box', set: 'Phantasmal Flames', pokemon: 'Pokémon TCG', price: 2200, image: '/images/MEGACHARIZARDEX.jpg', type: 'closed' },
+    { name: 'Meganium ex Mega EX Box', set: 'Ascended Heroes', pokemon: 'Pokémon TCG', price: 750, image: '/images/meganiumexbox.jpg', type: 'closed' },
+    { name: 'Feraligatr ex Mega EX Box', set: 'Ascended Heroes', pokemon: 'Pokémon TCG', price: 750, image: '/images/feraligatrexbox.jpg', type: 'closed' },
+    { name: 'Emboar ex Mega EX Box', set: 'Ascended Heroes', pokemon: 'Pokémon TCG', price: 750, image: '/images/emboarexbox.jpg', type: 'closed' },
+    { name: 'Pokeball Tin', set: 'Mix', pokemon: 'Pokémon TCG', price: 350, image: '/images/pokeballtin.jpg', type: 'closed' },
+    { name: 'Ascended Heroes Booster Bundle', set: 'Ascended Heroes', pokemon: 'Pokémon TCG', price: 900, image: '/images/boosterbundleASC.jpg', type: 'closed' },
+    { name: 'Team Rocket´s Nidoking Tin', set: 'Mix', pokemon: 'Pokémon TCG', price: 650, image: '/images/trnidotin.jpg', type: 'closed' },
+    { name: 'Paradox Destinies Iron Crown Tin', set: 'Mix', pokemon: 'Pokémon TCG', price: 500, image: '/images/paradoxtin.jpg', type: 'closed' },
+    { name: 'Mega Symphonia Booster Box', set: 'Mix', pokemon: 'Pokémon TCG', price: 1650, image: '/images/megasympho.jpg', type: 'closed' },
+    { name: 'Chaos Rising Build & Battle Box', set: 'Mix', pokemon: 'Pokémon TCG', price: 560, image: '/images/chaosrisingbb.jpg', type: 'closed' },
   ];
 
   // Determine which product list based on route
