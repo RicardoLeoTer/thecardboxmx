@@ -205,7 +205,7 @@ export default function Home() {
             opacity: heroLoaded ? 1 : 0, transform: heroLoaded ? 'translateY(0)' : 'translateY(30px)',
             transition: 'all 1s cubic-bezier(0.16,1,0.3,1) 0.2s',
           }}>
-            No solo vendemos cartas. Curamos las piezas que tu colección merece — auténticas, verificadas, y elegidas con el ojo de un coleccionista.
+            No solo vendemos cartas. Buscamos y cuidamos las piezas que tu colección merece — auténticas, verificadas, y elegidas con el ojo de un coleccionista.
           </p>
 
           <div style={{
@@ -269,7 +269,7 @@ export default function Home() {
           </div>
 
           <div style={{ textAlign: 'center', marginTop: 48 }}>
-            <span className="btn btn-primary font-body" style={{ fontSize: 15, fontWeight: 700, color: '#fff', background: C.azulAcento, padding: '15px 32px', borderRadius: 100, cursor: 'pointer' }} onClick={() => navigate('/catalogo')}>
+            <span className="btn btn-primary font-body" style={{ fontSize: 15, fontWeight: 700, color: '#fff', background: C.platino, padding: '15px 32px', borderRadius: 100, cursor: 'pointer' }} onClick={() => navigate('/catalogo')}>
               <a href="/catalogo/cartas-solas" style={{ /* estilos */ }}>
               Ver catálogo completo →
               </a>
