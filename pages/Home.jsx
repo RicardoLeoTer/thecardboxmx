@@ -95,7 +95,7 @@ export default function Home() {
     { name: 'Pikachu', set: '25th Anniversary', image: '/images/BIRTHDAYPIKA.jpg', tag: 'Edición limitada', glow: 'rgba(138,111,194,0.4)' },
     { name: 'Entei', set: 'Crown Zenith', image: '/images/ENTEIV.jpg', tag: 'Alt Art', glow: 'rgba(138,111,194,0.4)' },
     { name: 'Bulbasaur', set: 'Stellar Crown', image: '/images/SLEEPYBULBASAUR.jpg', tag: 'Alt Art', glow: 'rgba(138,111,194,0.4)' },
-    { name: 'Mimikyu', set: 'Destined Rivals', image: '/images/TEAMPRIMIMIKYU.jpg', tag: 'Alt Art', glow: 'rgba(138,111,194,0.4)' },
+    { name: 'Mimikyu', set: 'Destined Rivals', image: '/images/TEAMRMIMIKYU.jpg', tag: 'Alt Art', glow: 'rgba(138,111,194,0.4)' },
   ];
 
   return (
