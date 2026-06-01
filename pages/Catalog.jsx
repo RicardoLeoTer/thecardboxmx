@@ -55,7 +55,7 @@ export default function Catalog() {
     { name: 'Pikachu', set: '25th Anniversary', pokemon: 'Pikachu', image: '/images/BIRTHDAYPIKA.jpg', type: 'individual' },
     { name: 'Entei', set: 'Crown Zenith', pokemon: 'Entei', image: '/images/ENTEIV.jpg', type: 'individual' },
     { name: 'Bulbasaur', set: 'Stellar Crown', pokemon: 'Bulbasaur', image: '/images/SLEEPYBULBASAUR.jpg', type: 'individual' },
-    { name: 'Mimikyu', set: 'Destined Rivals', pokemon: 'Mimikyu', image: '/images/TEAMRIMIMIKYU.jpg', type: 'individual' },
+    { name: 'Mimikyu', set: 'Destined Rivals', pokemon: 'Mimikyu', image: '/images/TEAMRMIMIKYU.jpg', type: 'individual' },
     { name: 'Froakie', set: 'Ninja Spinner', pokemon: 'Froakie', image: '/images/FROAKIE.jpg', type: 'individual' },
     { name: 'Frogadier', set: 'Ninja Spinner', pokemon: 'Frogadier', image: '/images/FROGADIER.jpg', type: 'individual' },
     { name: 'Psyduck', set: 'Mega Dream ex', pokemon: 'Psyduck', image: '/images/PYSDUCK.jpg', type: 'individual' },
