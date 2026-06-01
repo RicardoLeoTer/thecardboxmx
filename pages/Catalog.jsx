@@ -211,7 +211,7 @@ export default function Catalog() {
               onMouseEnter={(e) => !isSoloCards && (e.currentTarget.style.background = 'rgba(192,204,216,0.2)')}
               onMouseLeave={(e) => !isSoloCards && (e.currentTarget.style.background = 'rgba(192,204,216,0.1)')}
             >
-              🃏 Cartas Solas
+              🃏 Singles
             </button>
             <button
               onClick={() => navigate('/catalogo/producto-cerrado')}
