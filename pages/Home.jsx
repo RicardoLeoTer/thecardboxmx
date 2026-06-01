@@ -153,7 +153,7 @@ export default function Home() {
               { label: 'Pokémon', action: () => navigate('/catalogo') },
               { label: 'Rifas', action: () => {} },
               { label: 'Blog', action: () => {} },
-              { label: 'Nosotros', action: () => {} },
+              { label: 'Nosotros', action: () => navigate('/nosotros') },
             ].map((l) => (
               <span key={l.label} className="nav-link font-body" style={{ fontSize: 14, fontWeight: 500, color: C.acero, display: window.innerWidth < 640 ? 'none' : 'block', cursor: 'pointer' }} onClick={l.action}>
                 {l.label}
@@ -270,7 +270,9 @@ export default function Home() {
 
           <div style={{ textAlign: 'center', marginTop: 48 }}>
             <span className="btn btn-primary font-body" style={{ fontSize: 15, fontWeight: 700, color: '#fff', background: C.azulAcento, padding: '15px 32px', borderRadius: 100, cursor: 'pointer' }} onClick={() => navigate('/catalogo')}>
+              <a href="/catalogo/cartas-solas" style={{ /* estilos */ }}>
               Ver catálogo completo →
+              </a>
             </span>
           </div>
         </div>
