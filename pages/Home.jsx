@@ -93,9 +93,9 @@ export default function Home() {
     { name: 'Mega Charizard EX', set: 'Phantasmal Flames', image: '/images/MEGACHARIZARDEX.jpg', tag: 'Más buscada', glow: 'rgba(224,92,42,0.4)' },
     { name: 'Charmander', set: 'Top Sun', image: '/images/CHARMANDERTOPSUN.jpg', tag: 'Vintage', glow: 'rgba(138,111,194,0.4)' },
     { name: 'Pikachu', set: '25th Anniversary', image: '/images/BIRTHDAYPIKA.jpg', tag: 'Edición limitada', glow: 'rgba(138,111,194,0.4)' },
-    { name: 'Entei', set: 'Crown Zenith', image: '/images/ENTEI.jpg', tag: 'Alt Art', glow: 'rgba(138,111,194,0.4)' },
+    { name: 'Entei', set: 'Crown Zenith', image: '/images/ENTEIV.jpg', tag: 'Alt Art', glow: 'rgba(138,111,194,0.4)' },
     { name: 'Bulbasaur', set: 'Stellar Crown', image: '/images/SLEEPYBULBASAUR.jpg', tag: 'Alt Art', glow: 'rgba(138,111,194,0.4)' },
-    { name: 'Mimikyu', set: 'Destined Rivals', image: '/images/TEAMPRIMIKYU.jpg', tag: 'Alt Art', glow: 'rgba(138,111,194,0.4)' },
+    { name: 'Mimikyu', set: 'Destined Rivals', image: '/images/TEAMPRIMIMIKYU.jpg', tag: 'Alt Art', glow: 'rgba(138,111,194,0.4)' },
   ];
 
   return (
