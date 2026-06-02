@@ -356,7 +356,7 @@ export default function Catalog() {
                         </p>
                       </div>
                     )}
-                    <a href="https://wa.me/525536513092" target="_blank" rel="noopener noreferrer" className="font-body" style={{
+                    <a href="https://www.instagram.com/thecardboxmx" target="_blank" rel="noopener noreferrer" className="font-body" style={{
                       display: 'block', textAlign: 'center', fontSize: 12, fontWeight: 700, color: '#fff',
                       background: C.azulAcento, padding: '10px 16px', borderRadius: 100, textDecoration: 'none',
                       transition: 'transform 0.3s',
