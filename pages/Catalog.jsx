@@ -74,8 +74,8 @@ export default function Catalog() {
     { name: 'Ascended Heroes Booster Bundle', set: 'Ascended Heroes', pokemon: 'Pokémon TCG', price: 900, image: '/images/boosterbundleASC.jpg', type: 'closed' },
     { name: 'Team Rocket´s Nidoking Tin', set: 'Mix', pokemon: 'Pokémon TCG', price: 650, image: '/images/trnidotin.jpg', type: 'closed' },
     { name: 'Paradox Destinies Iron Crown Tin', set: 'Mix', pokemon: 'Pokémon TCG', price: 500, image: '/images/paradoxtin.jpg', type: 'closed' },
-    { name: 'Mega Symphonia Booster Box', set: 'Mix', pokemon: 'Pokémon TCG', price: 1650, image: '/images/megasympho.jpg', type: 'closed' },
-    { name: 'Chaos Rising Build & Battle Box', set: 'Mix', pokemon: 'Pokémon TCG', price: 560, image: '/images/chaosrisingbb.jpg', type: 'closed' },
+    { name: 'Mega Symphonia Booster Box', set: 'Mix', pokemon: 'Pokémon TCG', price: 1600, image: '/images/megasympho.jpg', type: 'closed' },
+    // { name: 'Chaos Rising Build & Battle Box', set: 'Mix', pokemon: 'Pokémon TCG', price: 560, image: '/images/chaosrisingbb.jpg', type: 'closed' },
   ];
 
   // Determine which product list based on route
