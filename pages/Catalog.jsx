@@ -37,19 +37,17 @@ const C = {
 
 const WHATSAPP = '525536513092';
 
-// ?tipo= en la URL → tipo de producto en la base
+// ?tipo= en la URL. Singles incluye las gradeadas.
 const TIPOS = [
-  { slug: 'singles', label: '🃏 Singles', type: 'single' },
-  { slug: 'gradeadas', label: '💎 Gradeadas', type: 'graded' },
-  { slug: 'sellado', label: '📦 Producto cerrado', type: 'sealed' },
-  { slug: 'memorabilia', label: '🏆 Memorabilia', type: 'memorabilia' },
-  { slug: 'accesorios', label: '🧰 Accesorios', type: 'accessory' },
+  { slug: 'singles', label: '🃏 Singles', types: ['single', 'graded'] },
+  { slug: 'sellado', label: '📦 Producto cerrado', types: ['sealed'] },
+  { slug: 'memorabilia', label: '🏆 Memorabilia', types: ['memorabilia'], onlyIfStock: true },
 ];
 
 const SECTION_COPY = {
   todo: ['Catálogo', 'Pokémon, deportes y producto cerrado en un solo lugar'],
   pokemon: ['Pokémon', 'Singles, gradeadas y producto cerrado de colecciones antiguas y recientes'],
-  deportes: ['Deportes', 'MLB, NFL, NBA, fútbol y más: rookies, parallels y autógrafos'],
+  deportes: ['Deportes', 'MLB, NFL, NBA, fútbol y UFC: singles, producto cerrado, rookies, parallels y autógrafos'],
   ofertas: ['Ofertas', 'Piezas con precio especial por tiempo limitado'],
 };
 
@@ -116,7 +114,9 @@ export default function Catalog() {
     if (value) next.set(key, value); else next.delete(key);
     setSearchParams(next, { replace: true });
   };
-  const goSection = (path) => navigate(`/catalogo${path ? `/${path}` : ''}`);
+  // Al cambiar de liga se conserva la pestaña (Singles / Producto cerrado)
+  const goSection = (path, keepTipo = false) =>
+    navigate(`/catalogo${path ? `/${path}` : ''}${keepTipo && tipo ? `?tipo=${tipo}` : ''}`);
 
   // 1) Sección + liga
   const sectionItems = useMemo(() => items.filter((item) => {
@@ -127,12 +127,16 @@ export default function Catalog() {
   }), [items, section, liga]);
 
   // 2) Tipo y segmento (chips disponibles según lo que hay en la sección)
-  const availableTipos = TIPOS.filter((t) => sectionItems.some((i) => i.type === t.type));
+  // Singles y Producto cerrado siempre visibles en Pokémon, Deportes y cada liga
+  const showTipos = section !== 'todo' && section !== 'ofertas';
+  const availableTipos = TIPOS.filter((t) =>
+    t.onlyIfStock || !showTipos ? sectionItems.some((i) => t.types.includes(i.type)) : true
+  );
   const availableTags = tags.filter((t) => sectionItems.some((i) => i.tags?.includes(t.slug)));
 
-  const tipoType = TIPOS.find((t) => t.slug === tipo)?.type;
+  const tipoTypes = TIPOS.find((t) => t.slug === tipo)?.types;
   const baseItems = sectionItems.filter((item) =>
-    (!tipoType || item.type === tipoType) && (!segmento || item.tags?.includes(segmento))
+    (!tipoTypes || tipoTypes.includes(item.type)) && (!segmento || item.tags?.includes(segmento))
   );
   const collections = [...new Set(baseItems.map((i) => i.collection_name).filter(Boolean))].sort();
 
@@ -160,11 +164,13 @@ export default function Catalog() {
 
   const leagueName = leagues.find((l) => l.slug === liga)?.name;
   const segmentName = tags.find((t) => t.slug === segmento)?.name;
+  const tipoName = { singles: 'Singles', sellado: 'Producto cerrado', memorabilia: 'Memorabilia' }[tipo];
   const [baseTitle, pageSubtitle] = SECTION_COPY[section] || [currentRoot?.name || 'Catálogo', ''];
-  const pageTitle = [leagueName || baseTitle, segmentName].filter(Boolean).join(' · ');
+  const pageTitle = [leagueName || baseTitle, tipoName, segmentName].filter(Boolean).join(' · ');
 
   // Rutas viejas → nuevas (después de los hooks)
   if (section === 'cartas-solas') return <Navigate to="/catalogo/pokemon?tipo=singles" replace />;
+  if (section === 'accesorios') return <Navigate to="/catalogo" replace />;
   if (section === 'producto-cerrado') return <Navigate to="/catalogo/pokemon?tipo=sellado" replace />;
 
   return (
@@ -256,15 +262,15 @@ export default function Catalog() {
           {/* Ligas (solo en Deportes) */}
           {leagues.length > 0 && (
             <div className="tabs-row" style={{ marginBottom: 16 }}>
-              <Pill small active={!liga} onClick={() => goSection(section)}>Todas las ligas</Pill>
+              <Pill small active={!liga} onClick={() => goSection(section, true)}>Todas las ligas</Pill>
               {leagues.map((l) => (
-                <Pill small key={l.slug} active={liga === l.slug} onClick={() => goSection(`${section}/${l.slug}`)}>{l.name}</Pill>
+                <Pill small key={l.slug} active={liga === l.slug} onClick={() => goSection(`${section}/${l.slug}`, true)}>{l.name}</Pill>
               ))}
             </div>
           )}
 
           {/* Tipo de producto */}
-          {availableTipos.length > 1 && (
+          {(showTipos || availableTipos.length > 1) && (
             <div className="tabs-row" style={{ marginBottom: 16 }}>
               <Pill small active={!tipo} onClick={() => setQuery('tipo', null)}>Todo tipo</Pill>
               {availableTipos.map((t) => (

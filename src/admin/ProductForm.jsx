@@ -162,7 +162,7 @@ export default function ProductForm() {
       <section className="card">
         <label>Tipo
           <select value={f.type} onChange={set('type')}>
-            {Object.entries(TYPE_LABEL).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+            {Object.entries(TYPE_LABEL).filter(([v]) => v !== 'accessory' || f.type === 'accessory').map(([v, l]) => <option key={v} value={v}>{l}</option>)}
           </select>
         </label>
 
