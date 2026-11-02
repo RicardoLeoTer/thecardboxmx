@@ -460,6 +460,8 @@ export default function Arcade() {
                   Prende <b style={{ color: '#fff' }}>T·C·B</b> para subir el multiplicador, tumba los sobres <b style={{ color: '#fff' }}>P·A·K</b> para el bonus pega a las 3 <b style={{ color: '#ffd27a' }}>★</b> para encender el <b style={{ color: '#ffd27a' }}>JACKPOT</b>, sube la <b style={{ color: '#fff' }}>RAMPA</b> y tumba <b style={{ color: '#7cc4e0' }}>M·X·◆</b>. Tienes 5 bolas.
                 </p>
               )}
+              <p style={{ fontSize: 13, color: C.platino, marginBottom: 6 }}>🏆 Top 3 del mes: <b style={{ color: '#fff' }}>15% · 10% · 5%</b> de descuento</p>
+              <p style={{ fontSize: 12, color: '#f0a07a', marginBottom: 18 }}>🚫 Prohibido el uso de cheats: descalifica.</p>
               <button className="arc-btn" onClick={restart} style={{ background: C.azulAcento, color: '#fff', padding: '14px 34px', fontSize: 16 }}>
                 {hud.status === 'over' && started ? 'Jugar otra vez' : 'Jugar'}
               </button>

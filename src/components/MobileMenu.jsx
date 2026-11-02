@@ -6,6 +6,7 @@ const LINKS = [
   ['Inicio', '/'],
   ['Catálogo', '/catalogo'],
   ['Blog', '/blog'],
+  ['Arcade 🎮', '/arcade'],
   ['Sorteos, rifas y breaks', '/rifas'],
   ['Nosotros', '/nosotros'],
 ];

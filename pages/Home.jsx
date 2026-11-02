@@ -154,6 +154,7 @@ export default function Home() {
           <nav className="desk-nav" style={{ display: 'flex', gap: 28, alignItems: 'center' }}>
             {[
               { label: 'Catálogo', action: () => navigate('/catalogo') },
+              { label: 'Arcade', action: () => navigate('/arcade') },
               { label: 'Rifas', action: () => navigate('/rifas') },
               { label: 'Blog', action: () => navigate('/blog') },
               { label: 'Nosotros', action: () => navigate('/nosotros') },
@@ -292,6 +293,52 @@ export default function Home() {
         </div>
       </section>
 
+      {/* JUEGA Y GANA (Arcade) */}
+      <section style={{ padding: '110px 24px', background: `radial-gradient(ellipse 70% 60% at 50% 40%, rgba(224,92,42,0.10) 0%, transparent 70%), ${C.negro}` }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 56, alignItems: 'center' }}>
+          <Reveal>
+            <div onClick={() => navigate('/arcade')} className="card-hover" style={{ cursor: 'pointer', maxWidth: 340, margin: '0 auto', borderRadius: 26, padding: 14, background: 'linear-gradient(180deg, #1a1408, #0b0905)', border: '2px solid #6b4f1d', boxShadow: '0 0 0 5px #0b0905, 0 0 40px rgba(255,190,90,0.18)' }}>
+              <PinballArt />
+            </div>
+          </Reveal>
+          <div>
+            <Reveal>
+              <span className="font-body" style={{ fontSize: 13, fontWeight: 700, color: C.fuego, letterSpacing: 3, textTransform: 'uppercase' }}>
+                🎮 The Card Box Arcade
+              </span>
+              <h2 className="font-display" style={{ fontSize: 'clamp(40px, 7vw, 64px)', fontWeight: 900, color: '#fff', margin: '14px 0 18px', letterSpacing: -1.5, lineHeight: 1.02 }}>
+                Juega y gana
+              </h2>
+              <p className="font-body" style={{ fontSize: 18, color: C.acero, lineHeight: 1.6, marginBottom: 28, maxWidth: 520 }}>
+                Juega <b style={{ color: '#fff' }}>Pinball TCB</b>, sube la rampa, enciende el jackpot y pelea el primer lugar. Cada mes, los 3 mejores puntajes se llevan un descuento.
+              </p>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 26, maxWidth: 460 }}>
+                {[['🥇', '1er lugar', '15%'], ['🥈', '2º lugar', '10%'], ['🥉', '3er lugar', '5%']].map(([m, l, d]) => (
+                  <div key={l} style={{ textAlign: 'center', padding: '16px 8px', borderRadius: 16, background: `linear-gradient(165deg, ${C.azul}, ${C.carbon})`, border: '1px solid rgba(192,204,216,0.14)' }}>
+                    <div style={{ fontSize: 26 }}>{m}</div>
+                    <div className="font-display" style={{ fontSize: 30, fontWeight: 900, color: '#fff', lineHeight: 1.1 }}>{d}</div>
+                    <div className="font-body" style={{ fontSize: 12, color: C.acero, fontWeight: 600 }}>{l}</div>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+            <Reveal delay={0.2}>
+              <div className="font-body" style={{ display: 'flex', gap: 12, alignItems: 'flex-start', padding: '14px 16px', borderRadius: 14, background: 'rgba(224,92,42,0.08)', border: '1px solid rgba(224,92,42,0.3)', marginBottom: 28, maxWidth: 520 }}>
+                <span style={{ fontSize: 18 }}>🚫</span>
+                <p style={{ fontSize: 14, color: C.platino, lineHeight: 1.55 }}>
+                  <b style={{ color: '#fff' }}>Prohibido el uso de cheats.</b> Bots, trucos, modificaciones o cualquier otra forma de alterar el juego o el puntaje descalifican al jugador. Revisamos los 3 primeros lugares antes de entregar los premios.
+                </p>
+              </div>
+              <span className="btn btn-primary font-body" onClick={() => navigate('/arcade')} style={{ display: 'inline-block', fontSize: 16, fontWeight: 800, color: '#fff', background: C.fuego, padding: '16px 34px', borderRadius: 100, cursor: 'pointer' }}>
+                Jugar Pinball TCB →
+              </span>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
       {/* FINAL CTA */}
       <section id="contacto" style={{ padding: '120px 24px', background: C.negro, textAlign: 'center' }}>
         <Reveal>
@@ -334,5 +381,45 @@ export default function Home() {
         </div>
       </footer>
     </div>
+  );
+}
+
+// Ilustración del pinball para la sección "Juega y gana"
+function PinballArt() {
+  const bulbs = Array.from({ length: 21 }, (_, i) => {
+    const a = Math.PI + 0.15 + (i * (Math.PI - 0.3)) / 20;
+    return [150 + 118 * Math.cos(a), 150 + 118 * Math.sin(a), i];
+  });
+  return (
+    <svg viewBox="0 0 300 440" style={{ width: '100%', display: 'block', borderRadius: 16 }}>
+      <defs>
+        <linearGradient id="pbBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#132039" /><stop offset="1" stopColor="#060608" /></linearGradient>
+        <radialGradient id="pbBump" cx="0.35" cy="0.35" r="0.8"><stop offset="0" stopColor="#ffffff" /><stop offset="0.55" stopColor="#8898b0" /><stop offset="1" stopColor="#1a2a44" /></radialGradient>
+        <radialGradient id="pbBall" cx="0.35" cy="0.35" r="0.7"><stop offset="0" stopColor="#fff" /><stop offset="1" stopColor="#5a6a80" /></radialGradient>
+      </defs>
+      <style>{`.pb-bulb{animation:pbChase 1.2s steps(1) infinite}@keyframes pbChase{0%,100%{opacity:.25}50%{opacity:1}}`}</style>
+      <path d="M20 440 V150 A130 130 0 0 1 280 150 V440 Z" fill="url(#pbBg)" stroke="#c0ccd8" strokeWidth="3" />
+      {bulbs.map(([x, y, i]) => (
+        <circle key={i} className="pb-bulb" cx={x} cy={y} r="3" fill="#ffd27a" style={{ animationDelay: `${(i % 3) * 0.4}s` }} />
+      ))}
+      <path d="M48 330 Q40 230 70 150 Q95 105 125 95" fill="none" stroke="#e4ecf8" strokeOpacity="0.7" strokeWidth="16" strokeLinecap="round" />
+      <path d="M48 330 Q40 230 70 150 Q95 105 125 95" fill="none" stroke="#0e182c" strokeWidth="12" strokeLinecap="round" />
+      {[[108, 200, '⚽'], [192, 200, '🏀'], [150, 150, '⚾']].map(([x, y, e]) => (
+        <g key={e}><circle cx={x} cy={y} r="19" fill="url(#pbBump)" /><text x={x} y={y + 6} textAnchor="middle" fontSize="17">{e}</text></g>
+      ))}
+      <circle cx="150" cy="262" r="22" fill="url(#pbBump)" />
+      <path d="M150 248 L159 262 L150 276 L141 262 Z" fill="#0d1117" />
+      {[118, 150, 182].map((x, i) => <rect key={x} x={x - 13} y="104" width="26" height="9" rx="2" fill="#3fae6c" opacity={i === 1 ? 0.5 : 1} />)}
+      {[0, 1, 2].map((i) => <rect key={i} x="262" y={250 + i * 24} width="9" height="18" rx="2" fill="#3fb6e0" />)}
+      <text x="150" y="330" textAnchor="middle" fontFamily="Georgia, serif" fontWeight="900" fontSize="30" fill="#c0ccd8" opacity="0.18">TCB</text>
+      <line x1="60" y1="330" x2="88" y2="385" stroke="#e05c2a" strokeWidth="5" strokeLinecap="round" />
+      <line x1="240" y1="330" x2="212" y2="385" stroke="#e05c2a" strokeWidth="5" strokeLinecap="round" />
+      <line x1="98" y1="398" x2="140" y2="418" stroke="#e4ecf8" strokeWidth="12" strokeLinecap="round" />
+      <line x1="202" y1="398" x2="160" y2="418" stroke="#e4ecf8" strokeWidth="12" strokeLinecap="round" />
+      <circle cx="172" cy="318" r="8" fill="url(#pbBall)">
+        <animate attributeName="cy" values="318;230;300;318" dur="3.2s" repeatCount="indefinite" />
+        <animate attributeName="cx" values="172;120;190;172" dur="3.2s" repeatCount="indefinite" />
+      </circle>
+    </svg>
   );
 }

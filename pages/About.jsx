@@ -109,6 +109,16 @@ export default function About() {
               Catálogo
             </button>
             <button
+              onClick={() => navigate('/arcade')}
+              className="font-body"
+              style={{
+                background: 'none', border: 'none', color: C.platino, cursor: 'pointer',
+                fontSize: 14, fontWeight: 500,
+              }}
+            >
+              Arcade
+            </button>
+            <button
               onClick={() => navigate('/nosotros')}
               className="font-body"
               style={{

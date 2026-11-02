@@ -91,6 +91,7 @@ export default function Rifas() {
           <nav className="desk-nav" style={{ display: 'flex', gap: 24 }}>
             <span className="nav-link font-body" style={{ fontSize: 14, fontWeight: 500, color: C.acero }} onClick={() => navigate('/')}>Inicio</span>
             <span className="nav-link font-body" style={{ fontSize: 14, fontWeight: 500, color: C.acero }} onClick={() => navigate('/catalogo')}>Catálogo</span>
+            <span className="nav-link font-body" style={{ fontSize: 14, fontWeight: 500, color: C.acero }} onClick={() => navigate('/arcade')}>Arcade</span>
           </nav>
           <MobileMenu />
         </div>

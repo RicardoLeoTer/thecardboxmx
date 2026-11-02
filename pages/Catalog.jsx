@@ -173,6 +173,7 @@ export default function Catalog() {
               ['Inicio', '/', true],
               ['Catálogo', '/catalogo', false],
               ['Blog', '/blog', false],
+              ['Arcade', '/arcade', false],
               ['Rifas', '/rifas', true],
               ['Nosotros', '/nosotros', true],
             ].map(([label, to, hideMobile]) => (
