@@ -237,7 +237,7 @@ function Hub({ items, categories, tags, loading, q, setQuery, navigate }) {
       title: r.name, root: r,
       cats: childrenOf(r.id).map((c) => ({ cat: c, path: `${r.slug}/${c.slug}` })),
     })),
-  ].filter((g) => g.cats.length > 0);
+  ];
 
   const statsFor = (slug) => {
     const list = items.filter((i) => i.category_slug === slug || i.parent_category_slug === slug);
@@ -248,6 +248,11 @@ function Hub({ items, categories, tags, loading, q, setQuery, navigate }) {
       cover: list.find((i) => i.is_featured && i.cover_image)?.cover_image || list.find((i) => i.cover_image)?.cover_image,
     };
   };
+
+  // solo mostramos colecciones/ligas con al menos un producto publicado
+  const visibleGroups = groups
+    .map((g) => ({ ...g, cats: g.cats.filter(({ cat }) => statsFor(cat.slug).total > 0) }))
+    .filter((g) => g.cats.length > 0);
 
   const results = useMemo(() => (q ? items.filter((i) => matchesQuery(i, q)) : []), [items, q]);
   const offers = items.filter((i) => i.is_on_sale).length;
@@ -299,14 +304,14 @@ function Hub({ items, categories, tags, loading, q, setQuery, navigate }) {
                   background: `linear-gradient(90deg, rgba(194,65,12,0.35), rgba(16,26,46,0.6))`, border: '1px solid rgba(194,65,12,0.5)',
                   color: '#fff', fontSize: 16, fontWeight: 700, display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                 }}>
-                  <span>🔥 Ofertas · {offers} {offers === 1 ? 'pieza' : 'piezas'} con precio especial</span>
+                  <span>🔥 Ofertas · piezas con precio especial</span>
                   <span>→</span>
                 </button>
               )}
 
               {loading && <p className="font-body" style={{ color: C.acero }}>Cargando…</p>}
 
-              {groups.map((g) => (
+              {visibleGroups.map((g) => (
                 <div key={g.title} style={{ marginBottom: 48 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 20, gap: 12 }}>
                     <h2 className="font-display" style={{ fontSize: 28, fontWeight: 600 }}>{g.title}</h2>
@@ -329,10 +334,14 @@ function Hub({ items, categories, tags, loading, q, setQuery, navigate }) {
   );
 }
 
+const CHIP = {
+  fontSize: 11, fontWeight: 700, color: C.platino, padding: '4px 10px', borderRadius: 100,
+  background: 'rgba(26,106,138,0.25)', border: '1px solid rgba(26,106,138,0.5)',
+};
+
 function CollectionCard({ cat, stats, onClick }) {
   const [icon, color] = LOOK[cat.slug] || ['🃏', C.azulAcento];
   const image = cat.image_url || stats.cover;
-  const soon = stats.total === 0;
   return (
     <button onClick={onClick} className="card-hover" style={{
       textAlign: 'left', cursor: 'pointer', padding: 0, color: '#fff',
@@ -348,24 +357,17 @@ function CollectionCard({ cat, stats, onClick }) {
         {image
           ? <img src={image} alt={cat.name} loading="lazy" style={{ height: '100%', width: '100%', objectFit: 'cover', objectPosition: 'center 30%', opacity: 0.85 }} />
           : <span style={{ fontSize: 64, filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.5))' }}>{icon}</span>}
-        <span className="font-body" style={{
-          position: 'absolute', top: 12, right: 12, fontSize: 11, fontWeight: 800, letterSpacing: 0.4,
-          padding: '5px 12px', borderRadius: 100, border: '1px solid rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)',
-          background: soon ? 'rgba(0,0,0,0.55)' : 'rgba(26,106,138,0.85)',
-        }}>
-          {soon ? 'Muy pronto' : `${stats.total} disponibles`}
-        </span>
       </div>
       <div style={{ padding: '18px 20px 20px', display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
         <h3 className="font-display" style={{ fontSize: 22, fontWeight: 600 }}>{cat.name}</h3>
-        {cat.description && (
-          <p className="font-body" style={{ fontSize: 13, color: C.acero, lineHeight: 1.5 }}>{cat.description}</p>
+        {(cat.claim || cat.description) && (
+          <p className="font-body" style={{ fontSize: 13, color: C.acero, lineHeight: 1.5 }}>{cat.claim || cat.description}</p>
         )}
-        {!soon && (
-          <p className="font-body" style={{ fontSize: 12, color: C.platino, marginTop: 'auto', paddingTop: 6 }}>
-            🃏 {stats.singles} singles · 📦 {stats.sealed} cerrado
-          </p>
-        )}
+        {/* solo lo que hay: sin contadores */}
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 'auto', paddingTop: 6 }}>
+          {stats.singles > 0 && <span className="font-body" style={CHIP}>🃏 Singles</span>}
+          {stats.sealed > 0 && <span className="font-body" style={CHIP}>📦 Producto cerrado</span>}
+        </div>
       </div>
     </button>
   );
@@ -637,7 +639,7 @@ function ProductCard({ item, tags, showCategory }) {
                 )}
               </p>
               {item.quantity > 1 && (
-                <p className="font-body" style={{ fontSize: 10, color: C.acero, marginTop: 4 }}>{item.quantity} disponibles</p>
+                <p className="font-body" style={{ fontSize: 10, color: C.acero, marginTop: 4 }}>{item.quantity} {item.quantity === 1 ? 'disponible' : 'disponibles'}</p>
               )}
             </div>
           )}
