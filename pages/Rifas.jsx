@@ -1,4 +1,5 @@
 import React from 'react';
+import MobileMenu from '../src/components/MobileMenu.jsx';
 import { useNavigate } from 'react-router-dom';
 
 const C = {
@@ -87,10 +88,11 @@ export default function Rifas() {
             <Logo size={40} />
             <span className="font-display" style={{ fontSize: 17, fontWeight: 600, color: C.platino }}>The Card Box</span>
           </div>
-          <nav style={{ display: 'flex', gap: 24 }}>
+          <nav className="desk-nav" style={{ display: 'flex', gap: 24 }}>
             <span className="nav-link font-body" style={{ fontSize: 14, fontWeight: 500, color: C.acero }} onClick={() => navigate('/')}>Inicio</span>
             <span className="nav-link font-body" style={{ fontSize: 14, fontWeight: 500, color: C.acero }} onClick={() => navigate('/catalogo')}>Catálogo</span>
           </nav>
+          <MobileMenu />
         </div>
       </header>
 

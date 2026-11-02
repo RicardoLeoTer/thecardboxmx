@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import MobileMenu from '../src/components/MobileMenu.jsx';
 import { useNavigate, useParams } from 'react-router-dom';
 import { marked } from 'marked';
 import { supabase } from '../src/lib/supabase.js';
@@ -114,12 +115,13 @@ export default function Blog() {
             <Logo size={38} />
             <span className="font-display" style={{ fontSize: 16, fontWeight: 600, color: C.platino }}>The Card Box</span>
           </button>
-          <nav className="font-body" style={{ display: 'flex', gap: 22 }}>
+          <nav className="desk-nav font-body" style={{ display: 'flex', gap: 22 }}>
             <button className="nav-link hide-mobile" onClick={() => navigate('/')}>Inicio</button>
             <button className="nav-link" onClick={() => navigate('/catalogo')}>Catálogo</button>
             <button className="nav-link on" onClick={() => navigate('/blog')}>Blog</button>
             <button className="nav-link hide-mobile" onClick={() => navigate('/rifas')}>Rifas</button>
           </nav>
+          <MobileMenu />
         </div>
       </header>
 

@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import MobileMenu from '../src/components/MobileMenu.jsx';
 import { useNavigate, useParams, useSearchParams, Navigate } from 'react-router-dom';
 import { useCatalog } from '../src/lib/useCatalog.js';
 
@@ -167,7 +168,7 @@ export default function Catalog() {
             <span className="font-display" style={{ fontSize: 16, fontWeight: 600, color: C.platino }}>TCB</span>
           </button>
 
-          <nav style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
+          <nav className="desk-nav" style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
             {[
               ['Inicio', '/', true],
               ['Catálogo', '/catalogo', false],
@@ -188,6 +189,7 @@ export default function Catalog() {
               </button>
             ))}
           </nav>
+          <MobileMenu />
         </div>
       </header>
 
