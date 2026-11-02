@@ -7,7 +7,7 @@ const R = 8;              // radio de la bola
 const G = 1100;           // gravedad (inclinación de la mesa)
 const DT = 1 / 480;       // paso fijo de física
 const MAX_SPEED = 1800;
-const BALLS = 3;
+const BALLS = 5;
 const BALL_SAVE_MS = 5000;
 
 const seg = (ax, ay, bx, by, o = {}) => ({ ax, ay, bx, by, r: 0, e: 0.45, kick: 0, ...o });
@@ -53,7 +53,7 @@ function buildTable() {
   const standups = [340, 385, 430].map((y) => ({ ...seg(27, y - 13, 27, y + 13, { r: 3, e: 0.5 }), lit: false }));
 
   // hoyo JACKPOT (atrapa y escupe la bola)
-  const saucer = { x: 80, y: 300, r: 12, armed: false, holdUntil: 0, holding: false, flash: 0 };
+  const saucer = { x: 102, y: 302, r: 12, armed: false, holdUntil: 0, holding: false, flash: 0 };
 
   const bumpers = [
     { x: 135, y: 250, r: 24, icon: '⚽', flash: 0 },
@@ -78,7 +78,20 @@ function buildTable() {
     { side: 'R', px: 344, py: 332, len: 44, rest: Math.PI - 0.2, up: Math.PI + 0.55, a: Math.PI - 0.2, w: 0, r: 5, mini: true },
   ];
 
-  return { walls, bumpers, targets, lanes, flippers, standups, saucer };
+  // RAMPA elevada: si la bola sube con fuerza por la entrada, se sube a la rampa
+  // y recorre este camino por encima del tablero hasta soltarla arriba.
+  const ramp = {
+    entry: { x0: 50, x1: 96, y: 432 },
+    path: [[72, 432], [64, 340], [64, 240], [82, 172], [112, 130], [140, 114]],
+    riding: false, dist: 0, speed: 950, count: 0, flash: 0,
+  };
+
+  // banco de dianas M · X · ♦ en la pared derecha
+  const bank = [395, 425, 455].map((y, i) => ({
+    ...seg(345, y - 11, 345, y + 11, { r: 3, e: 0.4 }), up: true, label: ['M', 'X', '◆'][i],
+  }));
+
+  return { walls, bumpers, targets, lanes, flippers, standups, saucer, ramp, bank };
 }
 
 export function createGame({ onEvent = () => {} } = {}) {
@@ -115,6 +128,8 @@ export function createGame({ onEvent = () => {} } = {}) {
     s.targets.forEach((tg) => { tg.up = true; });
     s.standups.forEach((x) => { x.lit = false; });
     s.saucer.armed = false; s.saucer.holding = false;
+    s.ramp.riding = false; s.ramp.count = 0;
+    s.bank.forEach((x) => { x.up = true; });
     s.message = null;
     placeInLane();
     onEvent({ type: 'reset' });
@@ -180,6 +195,30 @@ export function createGame({ onEvent = () => {} } = {}) {
     }
     prevPlunger = input.plunger;
 
+    // RAMPA: mientras la bola va arriba, sigue el camino a velocidad fija
+    const rp = s.ramp;
+    if (rp.riding) {
+      rp.dist += rp.speed * dt;
+      let left = rp.dist, i = 0;
+      for (; i < rp.path.length - 1; i++) {
+        const [ax, ay] = rp.path[i], [bx, by] = rp.path[i + 1];
+        const L = Math.hypot(bx - ax, by - ay);
+        if (left <= L) { b.x = ax + (bx - ax) * (left / L); b.y = ay + (by - ay) * (left / L); break; }
+        left -= L;
+      }
+      if (i >= rp.path.length - 1) {
+        rp.riding = false;
+        const [ex, ey] = rp.path[rp.path.length - 1];
+        b.x = ex; b.y = ey; b.vx = 70; b.vy = 160;
+        rp.count += 1; rp.flash = s.time + 900;
+        const bonus = rp.count % 3 === 0 ? 4000 : 1000;
+        add(bonus);
+        say(rp.count % 3 === 0 ? `¡SÚPER RAMPA! +${(bonus * s.mult).toLocaleString('es-MX')}` : `RAMPA +${(bonus * s.mult).toLocaleString('es-MX')}`);
+        onEvent({ type: 'ramp', count: rp.count });
+      }
+      return;
+    }
+
     // hoyo JACKPOT: mientras sostiene la bola, no hay física
     const sc = s.saucer;
     if (sc.holding) {
@@ -193,9 +232,19 @@ export function createGame({ onEvent = () => {} } = {}) {
     }
 
     // integración
+    const prevY = b.y;
     b.vy += G * dt;
     b.x += b.vx * dt;
     b.y += b.vy * dt;
+
+    // entrada a la rampa: cruza la línea de entrada hacia arriba con fuerza
+    {
+      const en = rp.entry;
+      if (prevY > en.y && b.y <= en.y && b.x > en.x0 && b.x < en.x1 && b.vy < -420) {
+        rp.riding = true; rp.dist = 0; onEvent({ type: 'rampIn' });
+        return;
+      }
+    }
 
     // paredes
     for (const w of s.walls) {
@@ -236,6 +285,20 @@ export function createGame({ onEvent = () => {} } = {}) {
         return;
       }
     }
+
+    // banco M · X · ◆
+    for (const tg of s.bank) {
+      if (!tg.up) continue;
+      const hit = collideSeg(b, tg);
+      if (hit > 40) {
+        tg.up = false; add(300); onEvent({ type: 'bank' });
+        if (s.bank.every((x) => !x.up)) {
+          add(2500); say(`¡MÉXICO! +${(2500 * s.mult).toLocaleString('es-MX')}`); s.bankResetAt = s.time + 1200;
+          onEvent({ type: 'mx' });
+        }
+      }
+    }
+    if (s.bankResetAt && s.time >= s.bankResetAt) { s.bank.forEach((x) => { x.up = true; }); s.bankResetAt = 0; }
 
     // dianas (sobres)
     for (const tg of s.targets) {

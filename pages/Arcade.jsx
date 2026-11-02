@@ -92,7 +92,7 @@ function draw(ctx, g, scale) {
   const armed = s.saucer.armed;
   for (let i = 0; i < 3; i++) {
     const on = armed ? (blink + i) % 3 === 0 || pulse > 0.7 : false;
-    const x = 122 - i * 12, y = 338 - i * 11;
+    const x = 146 - i * 12, y = 346 - i * 11;
     ctx.fillStyle = on ? '#ffd27a' : 'rgba(255,210,122,0.12)';
     ctx.save(); ctx.translate(x, y); ctx.rotate(-2.4);
     ctx.beginPath(); ctx.moveTo(7, 0); ctx.lineTo(-4, -6); ctx.lineTo(-4, 6); ctx.closePath(); ctx.fill();
@@ -164,6 +164,19 @@ function draw(ctx, g, scale) {
     }
   }
 
+  // banco M · X · ◆ (pared derecha)
+  for (const t of s.bank) {
+    const cy = (t.ay + t.by) / 2;
+    if (t.up) {
+      const gr = ctx.createLinearGradient(0, t.ay, 0, t.by);
+      gr.addColorStop(0, '#1a6a8a'); gr.addColorStop(1, '#3fb6e0');
+      ctx.fillStyle = gr; roundRect(ctx, 339, t.ay, 12, t.by - t.ay, 3); ctx.fill();
+      ctx.fillStyle = '#fff'; ctx.font = '800 8px Manrope, sans-serif'; ctx.textAlign = 'center'; ctx.fillText(t.label, 345, cy + 0.5);
+    } else {
+      ctx.fillStyle = 'rgba(255,255,255,0.08)'; roundRect(ctx, 347, t.ay, 4, t.by - t.ay, 2); ctx.fill();
+    }
+  }
+
   // bumpers
   for (const bp of s.bumpers) {
     const lit = s.time < bp.flash;
@@ -203,12 +216,43 @@ function draw(ctx, g, scale) {
   for (let i = 0; i <= 6; i++) { const y = 696 + pull * 18 + i * ((24 - pull * 18) / 6); ctx.lineTo(i % 2 ? 360 : 372, y); }
   ctx.stroke();
 
+  // RAMPA elevada (va por encima de todo)
+  {
+    const rp = s.ramp;
+    const lit = s.time < rp.flash || rp.riding;
+    ctx.save();
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    const trace = () => { ctx.beginPath(); rp.path.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); };
+    // sombra de la rampa sobre la mesa
+    ctx.translate(4, 6); trace(); ctx.strokeStyle = 'rgba(0,0,0,0.35)'; ctx.lineWidth = 24; ctx.stroke(); ctx.translate(-4, -6);
+    // rieles (borde plateado) + piso semitransparente
+    trace(); ctx.strokeStyle = lit ? '#e4ecf8' : 'rgba(228,236,248,0.8)'; ctx.lineWidth = 24; ctx.stroke();
+    trace(); ctx.strokeStyle = 'rgba(14,24,44,0.9)'; ctx.lineWidth = 19; ctx.stroke();
+    trace(); ctx.strokeStyle = lit ? 'rgba(124,196,224,0.45)' : 'rgba(192,204,216,0.1)'; ctx.lineWidth = 19; ctx.stroke();
+    // flechas dentro de la rampa
+    ctx.fillStyle = lit ? '#ffd27a' : 'rgba(255,210,122,0.35)';
+    for (let i = 1; i < rp.path.length - 1; i++) {
+      const [ax, ay] = rp.path[i], [bx, by] = rp.path[i + 1];
+      ctx.save(); ctx.translate((ax + bx) / 2, (ay + by) / 2); ctx.rotate(Math.atan2(by - ay, bx - ax));
+      ctx.beginPath(); ctx.moveTo(5, 0); ctx.lineTo(-3, -4); ctx.lineTo(-3, 4); ctx.closePath(); ctx.fill(); ctx.restore();
+    }
+    ctx.restore();
+    // boca de entrada
+    const en = rp.entry;
+    ctx.fillStyle = lit ? '#ffd27a' : 'rgba(255,210,122,0.5)';
+    ctx.font = '800 8px Manrope, sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('▲ RAMPA', (en.x0 + en.x1) / 2, en.y + 14);
+    if (rp.count) { ctx.fillStyle = C.acero; ctx.font = '700 7px Manrope, sans-serif'; ctx.fillText(`${rp.count % 3}/3`, (en.x0 + en.x1) / 2, en.y + 24); }
+  }
+
   // bola
   const b = s.ball;
-  const bg2 = ctx.createRadialGradient(b.x - 3, b.y - 3, 1, b.x, b.y, 8);
+  const br = s.ramp.riding ? 9.5 : 8;
+  if (s.ramp.riding) { ctx.fillStyle = 'rgba(0,0,0,0.4)'; ctx.beginPath(); ctx.arc(b.x + 4, b.y + 6, 8, 0, Math.PI * 2); ctx.fill(); }
+  const bg2 = ctx.createRadialGradient(b.x - 3, b.y - 3, 1, b.x, b.y, br);
   bg2.addColorStop(0, '#ffffff'); bg2.addColorStop(0.5, '#c0ccd8'); bg2.addColorStop(1, '#5a6a80');
   ctx.fillStyle = bg2; ctx.shadowColor = 'rgba(255,255,255,0.6)'; ctx.shadowBlur = 8;
-  ctx.beginPath(); ctx.arc(b.x, b.y, 8, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(b.x, b.y, br, 0, Math.PI * 2); ctx.fill();
   ctx.shadowBlur = 0;
 }
 
@@ -412,7 +456,7 @@ export default function Arcade() {
                 <p style={{ color: C.platino, marginBottom: 18 }}>Hiciste <b style={{ color: '#fff' }}>{fmt(hud.score)}</b> puntos{hud.score >= best && hud.score > 0 ? ' · ¡nuevo récord! 🏆' : ''}</p>
               ) : (
                 <p style={{ color: C.acero, fontSize: 14, lineHeight: 1.6, marginBottom: 18 }}>
-                  Prende <b style={{ color: '#fff' }}>T·C·B</b> para subir el multiplicador, tumba los sobres <b style={{ color: '#fff' }}>P·A·K</b> para el bonus y pega a las 3 <b style={{ color: '#ffd27a' }}>★</b> para encender el <b style={{ color: '#ffd27a' }}>JACKPOT</b>.
+                  Prende <b style={{ color: '#fff' }}>T·C·B</b> para subir el multiplicador, tumba los sobres <b style={{ color: '#fff' }}>P·A·K</b> para el bonus pega a las 3 <b style={{ color: '#ffd27a' }}>★</b> para encender el <b style={{ color: '#ffd27a' }}>JACKPOT</b>, sube la <b style={{ color: '#fff' }}>RAMPA</b> y tumba <b style={{ color: '#7cc4e0' }}>M·X·◆</b>. Tienes 5 bolas.
                 </p>
               )}
               <button className="arc-btn" onClick={restart} style={{ background: C.azulAcento, color: '#fff', padding: '14px 34px', fontSize: 16 }}>
