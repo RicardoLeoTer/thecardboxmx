@@ -5,16 +5,15 @@ insert into storage.buckets (id, name, public)
 values ('product-images', 'product-images', true)
 on conflict (id) do nothing;
 
-create policy "fotos_publicas" on storage.objects
-  for select using (bucket_id = 'product-images');
+-- (El bucket es público: las fotos se ven por URL sin necesidad de una regla de lectura)
 
 create policy "socios_suben_fotos" on storage.objects
   for insert to authenticated
-  with check (bucket_id = 'product-images' and public.is_partner());
+  with check (bucket_id = 'product-images' and private.is_partner());
 
 create policy "socios_borran_fotos" on storage.objects
   for delete to authenticated
-  using (bucket_id = 'product-images' and public.is_partner());
+  using (bucket_id = 'product-images' and private.is_partner());
 
 -- 2) Dar de alta a los socios
 --    Primero crea los dos usuarios (correo + contraseña) en Supabase > Authentication > Users,
