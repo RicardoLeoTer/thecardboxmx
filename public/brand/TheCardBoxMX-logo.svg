@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+<defs>
+<linearGradient id="bg_s" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f4f6fa"/><stop offset="20%" stop-color="#b8c4d4"/><stop offset="50%" stop-color="#e4ecf8"/><stop offset="80%" stop-color="#7888a0"/><stop offset="100%" stop-color="#ccd8e8"/></linearGradient>
+<linearGradient id="bg_sb" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#506070"/><stop offset="50%" stop-color="#c0ccd8"/><stop offset="100%" stop-color="#e0eaf4"/></linearGradient>
+<linearGradient id="bg_card" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0d1117"/><stop offset="100%" stop-color="#161b22"/></linearGradient>
+</defs>
+<circle cx="200" cy="200" r="187" fill="none" stroke="url(#bg_s)" stroke-width="3"/>
+<circle cx="200" cy="200" r="181" fill="none" stroke="url(#bg_sb)" stroke-width="1" opacity="0.4"/>
+<rect x="105" y="68" width="190" height="264" rx="18" fill="url(#bg_card)"/>
+<rect x="109" y="72" width="182" height="256" rx="15" fill="none" stroke="url(#bg_s)" stroke-width="2"/>
+<rect x="124" y="86" width="152" height="112" rx="8" fill="rgba(255,255,255,0.025)" stroke="url(#bg_sb)" stroke-width="1" opacity="0.6"/>
+<polygon points="200,92 222,122 200,148 178,122" fill="url(#bg_s)"/>
+<polygon points="200,92 222,122 200,120" fill="rgba(255,255,255,0.45)"/>
+<polygon points="200,148 178,122 200,120" fill="rgba(0,0,0,0.35)"/>
+<text x="200" y="240" text-anchor="middle" font-family="Georgia,serif" font-size="52" font-weight="900" letter-spacing="10" stroke="url(#bg_s)" stroke-width="1.5" fill="url(#bg_s)">TCB</text>
+<line x1="140" y1="254" x2="168" y2="254" stroke="#a8b4c4" stroke-width="1"/>
+<rect x="196" y="250" width="8" height="8" fill="url(#bg_s)" opacity="0.7" transform="rotate(45 200 254)"/>
+<line x1="232" y1="254" x2="260" y2="254" stroke="#a8b4c4" stroke-width="1"/>
+<text x="200" y="282" text-anchor="middle" font-family="Georgia,serif" font-size="13.5" font-weight="700" letter-spacing="5" fill="url(#bg_s)" opacity="0.9">THE CARD BOX</text>
+<text x="200" y="302" text-anchor="middle" font-family="Georgia,serif" font-size="10.5" font-weight="700" letter-spacing="7" fill="url(#bg_sb)" opacity="0.65">M É X I C O</text>
+</svg>
