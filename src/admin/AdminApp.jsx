@@ -5,6 +5,7 @@ import Login from './Login'
 import Inventory from './Inventory'
 import ProductForm from './ProductForm'
 import Summary from './Summary'
+import Blog from './Blog'
 import './admin.css'
 
 const AdminCtx = createContext(null)
@@ -101,6 +102,7 @@ export default function AdminApp() {
             <Route path="nuevo" element={<ProductForm />} />
             <Route path="editar/:id" element={<ProductForm />} />
             <Route path="resumen" element={<Summary />} />
+            <Route path="blog" element={<Blog />} />
             <Route path="*" element={<Navigate to="." replace />} />
           </Routes>
         </main>
@@ -109,6 +111,7 @@ export default function AdminApp() {
           <NavLink to="." end>📦<span>Inventario</span></NavLink>
           <NavLink to="nuevo" className="adm-nav-main">＋<span>Nuevo</span></NavLink>
           <NavLink to="resumen">📊<span>Resumen</span></NavLink>
+          <NavLink to="blog">📰<span>Blog</span></NavLink>
         </nav>
       </div>
     </AdminCtx.Provider>

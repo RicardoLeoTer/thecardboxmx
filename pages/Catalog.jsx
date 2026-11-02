@@ -171,7 +171,8 @@ export default function Catalog() {
             {[
               ['Inicio', '/', true],
               ['Catálogo', '/catalogo', false],
-              ['Rifas', '/rifas', false],
+              ['Blog', '/blog', false],
+              ['Rifas', '/rifas', true],
               ['Nosotros', '/nosotros', true],
             ].map(([label, to, hideMobile]) => (
               <button
