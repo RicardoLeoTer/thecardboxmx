@@ -47,6 +47,7 @@ export default function Product() {
   const catPath = item ? `/catalogo/${item.parent_category_slug ? `${item.parent_category_slug}/` : ''}${item.category_slug}` : '/catalogo';
   const details = item ? [
     ['Tipo', TYPE[item.type]],
+    ['Formato', item.format_name],
     ['Colección', item.collection_name],
     [item.team ? 'Jugador' : 'Personaje', item.subject],
     ['Equipo', item.team],

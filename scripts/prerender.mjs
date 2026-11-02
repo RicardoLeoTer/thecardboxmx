@@ -73,7 +73,7 @@ async function write(route, html) {
 async function main() {
   const template = await fs.readFile(path.join(DIST, 'index.html'), 'utf8');
   const [cats, products, posts] = await Promise.all([
-    rest('categories?select=id,parent_id,name,slug,description,sort_order&is_active=eq.true&order=sort_order'),
+    rest('categories?select=id,parent_id,name,slug,description,claim,singles_text,sealed_text,sort_order&is_active=eq.true&order=sort_order'),
     rest('catalog?select=*'),
     rest('blog_posts?select=slug,title,excerpt,body_md,cover_url,published_at,updated_at&status=eq.publicado&order=published_at.desc'),
   ]);
@@ -111,7 +111,8 @@ ${blog.length ? `<h2>Del blog</h2><ul>${blog.slice(0, 5).map((p) => `<li>${link(
     const meta = staticMeta(route, categories);
     const own = items.filter((p) => p.category_slug === c.slug || p.parent_category_slug === c.slug);
     const subs = categories.filter((x) => x.parent_id === c.id);
-    const body = `<h1>${esc(meta.title.split(' | ')[0])}</h1><p>${esc(meta.description)}</p>
+    const body = `<h1>${esc(meta.title.split(' | ')[0])}</h1>${c.claim ? `<p><i>${esc(c.claim)}</i></p>` : ''}<p>${esc(meta.description)}</p>
+${c.singles_text ? `<h2>Singles</h2><p>${esc(c.singles_text)}</p>` : ''}${c.sealed_text ? `<h2>Producto cerrado</h2><p>${esc(c.sealed_text)}</p>` : ''}
 ${subs.length ? `<ul>${subs.map((s) => `<li>${link(`/catalogo/${c.slug}/${s.slug}`, s.name)}</li>`).join('')}</ul>` : ''}
 ${own.length ? `<ul>${own.map(productItem).join('')}</ul>` : '<p>Muy pronto.</p>'}`;
     await write(route, render(template, meta, body)); count++;
