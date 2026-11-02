@@ -5,6 +5,7 @@ import Catalog from '../pages/Catalog.jsx';
 import About from '../pages/About.jsx';
 import Rifas from '../pages/Rifas.jsx';
 import Blog from '../pages/Blog.jsx';
+import Arcade from '../pages/Arcade.jsx';
 
 // El panel admin se carga solo cuando alguien entra a /admin (no pesa en la tienda)
 const AdminApp = lazy(() => import('./admin/AdminApp.jsx'));
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/rifas" element={<Rifas />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<Blog />} />
+        <Route path="/arcade" element={<Arcade />} />
         <Route path="/admin/*" element={<Suspense fallback={null}><AdminApp /></Suspense>} />
       </Routes>
     </Router>
