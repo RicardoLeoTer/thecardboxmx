@@ -310,7 +310,7 @@ export default function Home() {
                 Juega y gana
               </h2>
               <p className="font-body" style={{ fontSize: 18, color: C.acero, lineHeight: 1.6, marginBottom: 28, maxWidth: 520 }}>
-                Juega <b style={{ color: '#fff' }}>Pinball TCB</b>, sube la rampa, enciende el jackpot y pelea el primer lugar. Cada mes, los 3 mejores puntajes se llevan un descuento.
+                Juega <b style={{ color: '#fff' }}>Pinball TCB</b>, sube la rampa, enciende el jackpot y pelea el primer lugar. Solo registra tu <b style={{ color: '#fff' }}>usuario de Instagram</b> para jugar. Cada mes, los 3 mejores puntajes se llevan un descuento.
               </p>
             </Reveal>
             <Reveal delay={0.1}>
@@ -329,6 +329,12 @@ export default function Home() {
                 <span style={{ fontSize: 18 }}>🚫</span>
                 <p style={{ fontSize: 14, color: C.platino, lineHeight: 1.55 }}>
                   <b style={{ color: '#fff' }}>Prohibido el uso de cheats.</b> Bots, trucos, modificaciones o cualquier otra forma de alterar el juego o el puntaje descalifican al jugador. Revisamos los 3 primeros lugares antes de entregar los premios.
+                </p>
+              </div>
+              <div className="font-body" style={{ display: 'flex', gap: 12, alignItems: 'flex-start', padding: '14px 16px', borderRadius: 14, background: 'rgba(225,48,108,0.08)', border: '1px solid rgba(225,48,108,0.3)', marginTop: -14, marginBottom: 28, maxWidth: 520 }}>
+                <span style={{ fontSize: 18 }}>📸</span>
+                <p style={{ fontSize: 14, color: C.platino, lineHeight: 1.55 }}>
+                  <b style={{ color: '#fff' }}>Valida tu puntaje por Instagram.</b> Al terminar tu partida toma captura de la pantalla final (trae tu código) y mándala por DM a <b style={{ color: '#fff' }}>@TheCardBoxMX</b> desde la cuenta con la que te registraste.
                 </p>
               </div>
               <span className="btn btn-primary font-body" onClick={() => navigate('/arcade')} style={{ display: 'inline-block', fontSize: 16, fontWeight: 800, color: '#fff', background: C.fuego, padding: '16px 34px', borderRadius: 100, cursor: 'pointer' }}>
