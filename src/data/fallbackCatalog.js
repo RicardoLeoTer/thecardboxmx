@@ -27,6 +27,8 @@ export const FALLBACK_TAGS = [
   { id: 13, name: 'Insert', slug: 'insert', scope: 'deportes', sort_order: 14 },
   { id: 14, name: 'Image Variation', slug: 'image-variation', scope: 'deportes', sort_order: 15 },
   { id: 15, name: 'Case Hit', slug: 'case-hit', scope: 'deportes', sort_order: 16 },
+  ...['R', 'P', 'SR', 'SSR', 'UR', 'AR', 'MR', 'CR', 'QR'].map((n, i) => ({ id: 20 + i, name: n, slug: `naruto-${n.toLowerCase()}`, scope: 'naruto', sort_order: 20 + i })),
+  { id: 30, name: 'Seriada', slug: 'seriada', scope: 'all', sort_order: 30 },
 ]
 
 const single = (name, collection, subject, image) => ({ type: 'single', name, collection, subject, image, price: null })
