@@ -152,7 +152,7 @@ export default function Home() {
             {[
               { label: 'Pokémon', action: () => navigate('/catalogo/pokemon') },
               { label: 'Deportes', action: () => navigate('/catalogo/deportes') },
-              { label: 'Rifas', action: () => {} },
+              { label: 'Rifas', action: () => navigate('/rifas') },
               { label: 'Blog', action: () => {} },
               { label: 'Nosotros', action: () => navigate('/nosotros') },
             ].map((l) => (
@@ -217,8 +217,8 @@ export default function Home() {
             <span className="btn btn-primary font-body" style={{ fontSize: 15, fontWeight: 700, color: '#fff', background: C.azulAcento, padding: '15px 32px', borderRadius: 100, cursor: 'pointer' }} onClick={() => navigate('/catalogo')}>
               Explorar colección
             </span>
-            <span className="btn btn-ghost font-body" style={{ fontSize: 15, fontWeight: 700, color: C.platino, background: 'transparent', padding: '15px 32px', borderRadius: 100, border: `1px solid rgba(192,204,216,0.25)`, cursor: 'pointer' }}>
-              Ver rifas activas →
+            <span className="btn btn-ghost font-body" style={{ fontSize: 15, fontWeight: 700, color: C.platino, background: 'transparent', padding: '15px 32px', borderRadius: 100, border: `1px solid rgba(192,204,216,0.25)`, cursor: 'pointer' }} onClick={() => navigate('/rifas')}>
+              Sorteos, rifas y breaks →
             </span>
           </div>
         </div>

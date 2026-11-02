@@ -10,7 +10,30 @@ import './admin.css'
 const AdminCtx = createContext(null)
 export const useAdmin = () => useContext(AdminCtx)
 
+// Permite "Agregar a pantalla de inicio" y abrir /admin como app (sin barra del navegador)
+function useInstallableApp() {
+  useEffect(() => {
+    const tags = [
+      ['link', { rel: 'manifest', href: '/admin-app/manifest.webmanifest' }],
+      ['link', { rel: 'apple-touch-icon', href: '/admin-app/apple-touch-icon.png' }],
+      ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
+      ['meta', { name: 'mobile-web-app-capable', content: 'yes' }],
+      ['meta', { name: 'apple-mobile-web-app-title', content: 'TCB Admin' }],
+      ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }],
+    ].map(([tag, attrs]) => {
+      const el = document.createElement(tag)
+      Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v))
+      document.head.appendChild(el)
+      return el
+    })
+    const prevTitle = document.title
+    document.title = 'TCB Admin'
+    return () => { tags.forEach((el) => el.remove()); document.title = prevTitle }
+  }, [])
+}
+
 export default function AdminApp() {
+  useInstallableApp()
   const [session, setSession] = useState(undefined) // undefined = cargando
   const [partner, setPartner] = useState(null) // null = cargando, false = sin acceso
   const [lookups, setLookups] = useState({ categories: [], collections: [], partners: [], tags: [] })

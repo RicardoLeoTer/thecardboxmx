@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from '../pages/Home.jsx';
 import Catalog from '../pages/Catalog.jsx';
 import About from '../pages/About.jsx';
+import Rifas from '../pages/Rifas.jsx';
 
 // El panel admin se carga solo cuando alguien entra a /admin (no pesa en la tienda)
 const AdminApp = lazy(() => import('./admin/AdminApp.jsx'));
@@ -17,6 +18,7 @@ export default function App() {
             /catalogo/cartas-solas y /catalogo/producto-cerrado redirigen a las nuevas */}
         <Route path="/catalogo/*" element={<Catalog />} />
         <Route path="/nosotros" element={<About />} />
+        <Route path="/rifas" element={<Rifas />} />
         <Route path="/admin/*" element={<Suspense fallback={null}><AdminApp /></Suspense>} />
       </Routes>
     </Router>
