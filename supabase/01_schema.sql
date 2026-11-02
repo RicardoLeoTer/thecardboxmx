@@ -339,9 +339,8 @@ insert into categories (id, parent_id, name, slug, sort_order) values
   (4, 2,    'NFL',         'nfl',                2),
   (5, 2,    'NBA',         'nba',                3),
   (6, 2,    'Fútbol',      'futbol',             4),
-  (7, 2,    'F1',          'f1',                 5),
-  (8, null, 'Accesorios',  'accesorios',         3);
-select setval('categories_id_seq', 8);
+  (7, 2,    'UFC',         'ufc',                5);
+select setval('categories_id_seq', 7);
 
 -- Segmentos iniciales
 insert into tags (name, slug, scope, sort_order) values

@@ -9,8 +9,7 @@ export const FALLBACK_CATEGORIES = [
   { id: 4, parent_id: 2, name: 'NFL', slug: 'nfl', sort_order: 2 },
   { id: 5, parent_id: 2, name: 'NBA', slug: 'nba', sort_order: 3 },
   { id: 6, parent_id: 2, name: 'Fútbol', slug: 'futbol', sort_order: 4 },
-  { id: 7, parent_id: 2, name: 'F1', slug: 'f1', sort_order: 5 },
-  { id: 8, parent_id: null, name: 'Accesorios', slug: 'accesorios', sort_order: 3 },
+  { id: 7, parent_id: 2, name: 'UFC', slug: 'ufc', sort_order: 5 },
 ]
 
 export const FALLBACK_TAGS = [
