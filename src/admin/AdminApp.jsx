@@ -38,7 +38,7 @@ export default function AdminApp() {
   useInstallableApp()
   const [session, setSession] = useState(undefined) // undefined = cargando
   const [partner, setPartner] = useState(null) // null = cargando, false = sin acceso
-  const [lookups, setLookups] = useState({ categories: [], collections: [], partners: [], tags: [] })
+  const [lookups, setLookups] = useState({ categories: [], collections: [], partners: [], tags: [], formats: [] })
 
   useEffect(() => {
     if (!supabase) return
@@ -48,14 +48,15 @@ export default function AdminApp() {
   }, [])
 
   const reloadLookups = useCallback(async () => {
-    const [p, c, col, t] = await Promise.all([
+    const [p, c, col, t, fm] = await Promise.all([
       supabase.from('partners').select('*').order('name'),
       supabase.from('categories').select('*').order('sort_order'),
       supabase.from('collections').select('*').order('year', { ascending: false }),
       supabase.from('tags').select('*').eq('is_active', true).order('sort_order'),
+      supabase.from('sealed_formats').select('*').eq('is_active', true).order('sort_order'),
     ])
     const partners = p.data ?? []
-    setLookups({ partners, categories: c.data ?? [], collections: col.data ?? [], tags: t.data ?? [] })
+    setLookups({ partners, categories: c.data ?? [], collections: col.data ?? [], tags: t.data ?? [], formats: fm.data ?? [] })
     return partners
   }, [])
 

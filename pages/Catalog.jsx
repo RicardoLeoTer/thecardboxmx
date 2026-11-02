@@ -101,7 +101,7 @@ export default function Catalog() {
   const params = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const [scrolled, setScrolled] = React.useState(false);
-  const { items, categories, tags, loading } = useCatalog();
+  const { items, categories, tags, formats, loading } = useCatalog();
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -197,7 +197,7 @@ export default function Catalog() {
       </header>
 
       {section
-        ? <Section {...{ section, liga, items, categories, tags, loading, searchParams, setQuery, navigate }} />
+        ? <Section {...{ section, liga, items, categories, tags, formats, loading, searchParams, setQuery, navigate }} />
         : <Hub {...{ items, categories, tags, loading, q, setQuery, navigate }} />}
 
       {/* ============ FOOTER ============ */}
@@ -374,12 +374,13 @@ function CollectionCard({ cat, stats, onClick }) {
 /* =====================================================================
    SECCIÓN: Pokémon, Naruto, MLB… con Singles / Producto cerrado
    ===================================================================== */
-function Section({ section, liga, items, categories, tags, loading, searchParams, setQuery, navigate }) {
+function Section({ section, liga, items, categories, tags, formats = [], loading, searchParams, setQuery, navigate }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCollection, setSelectedCollection] = useState('all');
   const [sortBy, setSortBy] = useState('featured');
   const tipo = searchParams.get('tipo');
   const segmento = searchParams.get('segmento');
+  const formato = searchParams.get('formato');
   useSeo(staticMeta(`/catalogo/${section}${liga ? `/${liga}` : ''}`, categories));
 
   React.useEffect(() => { setSelectedCollection('all'); setSearchQuery(''); }, [section, liga]);
@@ -407,8 +408,13 @@ function Section({ section, liga, items, categories, tags, loading, searchParams
 
   const tipoTypes = TIPOS.find((t) => t.slug === tipo)?.types;
   const baseItems = sectionItems.filter((item) =>
-    (!tipoTypes || tipoTypes.includes(item.type)) && (!segmento || item.tags?.includes(segmento))
+    (!tipoTypes || tipoTypes.includes(item.type)) && (!segmento || item.tags?.includes(segmento)) &&
+    (!formato || item.format_slug === formato)
   );
+  // formatos de producto sellado de esta colección (Blaster, Hobby Box, ETB, Tin…)
+  const scopeFormats = isOffers ? [] : formats.filter((f) => f.scope === 'all' || f.scope === section);
+  const sealedItems = sectionItems.filter((i) => i.type === 'sealed');
+  const formatCount = (slug) => sealedItems.filter((i) => i.format_slug === slug).length;
   const collections = [...new Set(baseItems.map((i) => i.collection_name).filter(Boolean))].sort();
 
   const results = useMemo(() => {
@@ -431,8 +437,13 @@ function Section({ section, liga, items, categories, tags, loading, searchParams
 
   const tipoName = { singles: 'Singles', sellado: 'Producto cerrado', memorabilia: 'Memorabilia' }[tipo];
   const segmentName = tags.find((t) => t.slug === segmento)?.name;
-  const title = [isOffers ? 'Ofertas' : current?.name, tipoName, segmentName].filter(Boolean).join(' · ');
-  const subtitle = isOffers ? 'Piezas con precio especial por tiempo limitado' : current?.description;
+  const title = [isOffers ? 'Ofertas' : current?.name, scopeFormats.find((f) => f.slug === formato)?.name || tipoName, segmentName].filter(Boolean).join(' · ');
+  const pick = (k) => current?.[k] || root?.[k];
+  const claim = isOffers ? null : pick('claim');
+  const subtitle = isOffers ? 'Piezas con precio especial por tiempo limitado'
+    : tipo === 'singles' ? (pick('singles_text') || current?.description)
+    : tipo === 'sellado' ? (pick('sealed_text') || current?.description)
+    : current?.description;
 
   return (
     <>
@@ -447,7 +458,12 @@ function Section({ section, liga, items, categories, tags, loading, searchParams
           <h1 className="font-display" style={{ fontSize: 'clamp(36px, 7vw, 56px)', fontWeight: 900, letterSpacing: -1, lineHeight: 1.1, marginBottom: 12 }}>
             {title || '…'}
           </h1>
-          {subtitle && <p className="font-body" style={{ fontSize: 17, color: C.acero, marginBottom: 28 }}>{subtitle}</p>}
+          {claim && (
+            <p className="font-display" style={{ fontSize: 'clamp(19px, 2.6vw, 24px)', fontWeight: 600, color: C.platinoClaro, marginBottom: 10, fontStyle: 'italic' }}>
+              {claim}
+            </p>
+          )}
+          {subtitle && <p className="font-body" style={{ fontSize: 17, color: C.acero, marginBottom: 28, maxWidth: 720, lineHeight: 1.6 }}>{subtitle}</p>}
 
           {/* Ligas (Deportes) */}
           {leagues.length > 0 && (
@@ -461,14 +477,29 @@ function Section({ section, liga, items, categories, tags, loading, searchParams
 
           {/* Singles / Producto cerrado */}
           <div className="tabs-row" style={{ marginBottom: 16 }}>
-            <Pill active={!tipo} onClick={() => setQuery('tipo', null)}>Todo</Pill>
+            <Pill active={!tipo} onClick={() => { setQuery('formato', null); setQuery('tipo', null); }}>Todo</Pill>
             {availableTipos.map((t) => (
-              <Pill key={t.slug} active={tipo === t.slug} onClick={() => setQuery('tipo', t.slug)}>{t.label}</Pill>
+              <Pill key={t.slug} active={tipo === t.slug} onClick={() => { if (t.slug !== 'sellado') setQuery('formato', null); setQuery('tipo', t.slug); }}>{t.label}</Pill>
             ))}
           </div>
 
+          {/* Formatos de producto sellado */}
+          {tipo === 'sellado' && scopeFormats.length > 0 && (
+            <div className="tabs-row" style={{ marginBottom: 16 }}>
+              <Pill small active={!formato} onClick={() => setQuery('formato', null)}>📦 Todos los formatos</Pill>
+              {scopeFormats.map((f) => {
+                const n = formatCount(f.slug);
+                return (
+                  <Pill small key={f.slug} active={formato === f.slug} onClick={() => setQuery('formato', f.slug)}>
+                    <span style={{ opacity: n ? 1 : 0.55 }}>{f.name}{n ? ` · ${n}` : ''}</span>
+                  </Pill>
+                );
+              })}
+            </div>
+          )}
+
           {/* Segmentos */}
-          {availableTags.length > 0 && (
+          {tipo !== 'sellado' && availableTags.length > 0 && (
             <div className="tabs-row">
               <Pill small active={!segmento} onClick={() => setQuery('segmento', null)}>✨ Todos</Pill>
               {availableTags.map((t) => (
@@ -574,6 +605,7 @@ function ProductCard({ item, tags, showCategory }) {
           : <span style={{ fontSize: 48, opacity: 0.4 }}>🃏</span>}
         <div style={{ position: 'absolute', top: 12, left: 12, display: 'flex', flexWrap: 'wrap', gap: 6, maxWidth: 'calc(100% - 24px)' }}>
           {item.is_on_sale && <Badge color={C.oferta}>Oferta</Badge>}
+          {item.format_name && <Badge color="rgba(26,106,138,0.85)">{item.format_name}</Badge>}
           {tagNames.map((n) => <Badge key={n}>{n}</Badge>)}
         </div>
       </a>

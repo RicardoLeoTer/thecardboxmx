@@ -29,16 +29,17 @@ const EMPTY = {
   location: '',
   is_featured: false,
   sku: '',
+  format_id: '',
 }
 
 // Campos que se mandan vacíos como null
-const NULLABLE = ['price', 'collection_id', 'subject', 'team', 'card_number', 'variant', 'serial_number', 'condition',
+const NULLABLE = ['price', 'format_id', 'collection_id', 'subject', 'team', 'card_number', 'variant', 'serial_number', 'condition',
   'grading_company', 'grade', 'cert_number', 'description', 'compare_at_price', 'cost', 'owner_id', 'location', 'sku']
 
 export default function ProductForm() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { partner, partners, categories, collections, tags, reloadLookups } = useAdmin()
+  const { partner, partners, categories, collections, tags, formats = [], reloadLookups } = useAdmin()
   const [f, setF] = useState({ ...EMPTY, owner_id: partner.id })
   const [images, setImages] = useState([]) // existentes
   const [files, setFiles] = useState([]) // nuevas
@@ -65,6 +66,7 @@ export default function ProductForm() {
   const isSports = category && sportsRoot && (category.id === sportsRoot.id || category.parent_id === sportsRoot.id)
   const isCard = ['single', 'graded'].includes(f.type)
   const rootSlug = category && (category.parent_id ? categories.find((c) => c.id === category.parent_id)?.slug : category.slug)
+  const availableFormats = formats.filter((fm) => fm.scope === 'all' || fm.scope === rootSlug)
   const availableTags = tags.filter((t) => t.scope === 'all' || t.scope === rootSlug)
   const toggleTag = (tid) => setTagIds(tagIds.includes(tid) ? tagIds.filter((x) => x !== tid) : [...tagIds, tid])
   const catCollections = useMemo(
@@ -116,6 +118,8 @@ export default function ProductForm() {
     // Limpia campos que no aplican al tipo
     if (f.type !== 'graded') { payload.grading_company = null; payload.grade = null; payload.cert_number = null }
     if (f.type !== 'single') payload.condition = null
+    if (f.type !== 'sealed') payload.format_id = null
+    else if (payload.format_id != null) payload.format_id = Number(payload.format_id)
     if (f.type === 'single' || f.type === 'graded') payload.quantity = Math.min(payload.quantity, 1) || 1
 
     let productId = id
@@ -247,6 +251,24 @@ export default function ProductForm() {
               </label>
               <label>Grado<input type="number" step="0.5" min="1" max="10" value={f.grade} onChange={set('grade')} required /></label>
               <label>Certificado<input value={f.cert_number} onChange={set('cert_number')} /></label>
+            </div>
+          )}
+        </section>
+      )}
+
+      {f.type === 'sealed' && (
+        <section className="card">
+          <h4>Formato</h4>
+          {availableFormats.length === 0 ? (
+            <p className="muted small">Esta colección todavía no tiene formatos. Elige primero la categoría (Pokémon o una liga de deportes).</p>
+          ) : (
+            <div className="chips wrap">
+              <button type="button" className={`chip ${!f.format_id ? 'on' : ''}`} onClick={() => setF({ ...f, format_id: '' })}>Sin formato</button>
+              {availableFormats.map((fm) => (
+                <button type="button" key={fm.id} className={`chip ${Number(f.format_id) === fm.id ? 'on' : ''}`} onClick={() => setF({ ...f, format_id: fm.id })}>
+                  {Number(f.format_id) === fm.id ? '✓ ' : ''}{fm.name}
+                </button>
+              ))}
             </div>
           )}
         </section>
