@@ -190,6 +190,10 @@ begin
   return new;
 end $$;
 
+-- El historial lo escribe solo este trigger (security definer); nadie inserta registros a mano
+alter function trg_products_log() security definer;
+revoke execute on function trg_products_log() from public, anon, authenticated;
+
 create trigger products_log
 before update on products
 for each row execute function trg_products_log();
