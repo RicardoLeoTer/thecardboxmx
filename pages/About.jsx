@@ -192,7 +192,7 @@ export default function About() {
                 🌟 Nuestro catálogo
               </h3>
               <p className="font-body" style={{ fontSize: 16, color: C.acero, lineHeight: 1.8 }}>
-                Ofrecemos cartas individuales de Pokémon TCG desde sets clásicos hasta los más recientes. También contamos con productos cerrados (booster boxes, set boxes y colecciones especiales) para los coleccionistas que buscan experiencias completas. Cada mes añadimos piezas nuevas y raras a nuestro inventario.
+                Ofrecemos cartas y artículos de colección: Pokémon, One Piece, Naruto y cartas deportivas, desde sets clásicos hasta los más recientes. También contamos con producto cerrado (booster boxes, hobby boxes, set boxes y colecciones especiales) para los coleccionistas que buscan experiencias completas. Cada mes añadimos piezas nuevas y raras a nuestro inventario.
               </p>
             </div>
           </div>
