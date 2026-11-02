@@ -382,7 +382,7 @@ export default function Home() {
             <span className="font-display" style={{ fontSize: 15, fontWeight: 600, color: C.platino }}>The Card Box MX</span>
           </div>
           <p className="font-body" style={{ fontSize: 12, color: '#506070' }}>
-            © 2026 The Card Box MX · <a href="https://www.instagram.com/thecardboxmx?igsh=endjdmZ3cnU0MWFm&utm_source=Website" target="_blank" rel="noopener noreferrer" style={{ color: '#506070', textDecoration: 'none' }}>@TheCardBoxMX</a> · Pokémon © Nintendo / GameFreak
+            © 2026 The Card Box MX · <a href="https://www.instagram.com/thecardboxmx?igsh=endjdmZ3cnU0MWFm&utm_source=Website" target="_blank" rel="noopener noreferrer" style={{ color: '#506070', textDecoration: 'none' }}>@TheCardBoxMX</a> · Cartas, coleccionables y más
           </p>
         </div>
       </footer>
