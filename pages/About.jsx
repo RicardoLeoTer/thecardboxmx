@@ -1,5 +1,7 @@
 import React from 'react';
 import MobileMenu from '../src/components/MobileMenu.jsx';
+import { useSeo } from '../src/seo/useSeo.js';
+import { staticMeta } from '../src/seo/meta.js';
 import { useNavigate } from 'react-router-dom';
 
 function Logo({ size = 48 }) {
@@ -26,6 +28,7 @@ function Logo({ size = 48 }) {
 
 export default function About() {
   const navigate = useNavigate();
+  useSeo(staticMeta('/nosotros'));
   const [scrolled, setScrolled] = React.useState(false);
 
   React.useEffect(() => {
