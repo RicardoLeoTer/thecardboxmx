@@ -15,11 +15,11 @@ alter table products add column if not exists format_id int references sealed_fo
 grant select (format_id) on products to anon;
 
 insert into sealed_formats (name, slug, scope, sort_order) values
-  ('Blaster','blaster','deportes',1), ('Mega Box','mega-box','deportes',2), ('Hanger Box','hanger-box','deportes',3),
+  ('Value Box','value-box','deportes',1), ('Mega Box','mega-box','deportes',2), ('Hanger Box','hanger-box','deportes',3),
   ('Sobre','sobre','deportes',4), ('Hobby Box','hobby-box','deportes',5), ('Jumbo Box','jumbo-box','deportes',6),
   ('ETB','etb','pokemon',1), ('Binder Collection','binder-collection','pokemon',2), ('Booster Bundle','booster-bundle','pokemon',3),
-  ('Build & Battle','build-battle','pokemon',4), ('Tin','tin','pokemon',5), ('Poster Collection','poster-collection','pokemon',6),
-  ('Mega EX Box','mega-ex-box','pokemon',7), ('First Partner','first-partner','pokemon',8)
+  ('Booster Box','booster-box','pokemon',4), ('Build & Battle','build-battle','pokemon',5), ('Tin','tin','pokemon',6),
+  ('Poster Collection','poster-collection','pokemon',7), ('Mega EX Box','mega-ex-box','pokemon',8), ('First Partner','first-partner','pokemon',9)
 on conflict (slug) do nothing;
 -- La vista catalog suma al final: f.slug as format_slug, f.name as format_name (left join sealed_formats)
 -- Los textos de cada colección se editan en la tabla categories (claim, singles_text, sealed_text, description).

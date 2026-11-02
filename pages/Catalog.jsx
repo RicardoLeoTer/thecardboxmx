@@ -414,7 +414,8 @@ function Section({ section, liga, items, categories, tags, formats = [], loading
   // formatos de producto sellado de esta colección (Blaster, Hobby Box, ETB, Tin…)
   const scopeFormats = isOffers ? [] : formats.filter((f) => f.scope === 'all' || f.scope === section);
   const sealedItems = sectionItems.filter((i) => i.type === 'sealed');
-  const formatCount = (slug) => sealedItems.filter((i) => i.format_slug === slug).length;
+  // solo se muestran los formatos que tienen al menos un producto publicado
+  const visibleFormats = scopeFormats.filter((f) => sealedItems.some((i) => i.format_slug === f.slug));
   const collections = [...new Set(baseItems.map((i) => i.collection_name).filter(Boolean))].sort();
 
   const results = useMemo(() => {
@@ -484,17 +485,12 @@ function Section({ section, liga, items, categories, tags, formats = [], loading
           </div>
 
           {/* Formatos de producto sellado */}
-          {tipo === 'sellado' && scopeFormats.length > 0 && (
+          {tipo === 'sellado' && visibleFormats.length > 0 && (
             <div className="tabs-row" style={{ marginBottom: 16 }}>
               <Pill small active={!formato} onClick={() => setQuery('formato', null)}>📦 Todos los formatos</Pill>
-              {scopeFormats.map((f) => {
-                const n = formatCount(f.slug);
-                return (
-                  <Pill small key={f.slug} active={formato === f.slug} onClick={() => setQuery('formato', f.slug)}>
-                    <span style={{ opacity: n ? 1 : 0.55 }}>{f.name}{n ? ` · ${n}` : ''}</span>
-                  </Pill>
-                );
-              })}
+              {visibleFormats.map((f) => (
+                <Pill small key={f.slug} active={formato === f.slug} onClick={() => setQuery('formato', f.slug)}>{f.name}</Pill>
+              ))}
             </div>
           )}
 
