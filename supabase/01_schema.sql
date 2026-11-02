@@ -180,7 +180,7 @@ create table inventory_log (
 
 -- updated_at + log automático de cambios de estado/cantidad
 create or replace function trg_products_log()
-returns trigger language plpgsql as $$
+returns trigger language plpgsql set search_path = public as $$
 begin
   new.updated_at := now();
   if new.status is distinct from old.status or new.quantity is distinct from old.quantity then
@@ -196,7 +196,7 @@ for each row execute function trg_products_log();
 
 -- Al apartar: el producto pasa a 'apartado' (si es pieza única)
 create or replace function trg_reservation_apply()
-returns trigger language plpgsql as $$
+returns trigger language plpgsql set search_path = public as $$
 begin
   update products
      set status = 'apartado'
@@ -211,7 +211,7 @@ for each row execute function trg_reservation_apply();
 -- Al registrar venta: descuenta cantidad, marca vendido si llega a 0
 -- y cierra el apartado activo. Evita vender lo que ya no hay.
 create or replace function trg_sale_apply()
-returns trigger language plpgsql as $$
+returns trigger language plpgsql set search_path = public as $$
 declare v_qty int;
 begin
   select quantity into v_qty from products where id = new.product_id for update;
@@ -280,7 +280,7 @@ select coalesce(pt.name, 'Negocio') as owner,
 -- =====================================================================
 
 create or replace function is_partner()
-returns boolean language sql stable security definer as $$
+returns boolean language sql stable security definer set search_path = public as $$
   select exists (select 1 from partners where user_id = auth.uid());
 $$;
 
@@ -352,3 +352,8 @@ insert into tags (name, slug, scope, sort_order) values
   ('Autógrafo',                   'autografo',   'all',      11),
   ('Rookie',                      'rookie',      'deportes', 12),
   ('Patch / Relic',               'patch',       'deportes', 13);
+
+-- is_partner() vive en un esquema privado: se usa en las reglas RLS pero no queda expuesta en la API
+create schema if not exists private;
+grant usage on schema private to anon, authenticated;
+alter function public.is_partner() set schema private;
