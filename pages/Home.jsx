@@ -150,8 +150,7 @@ export default function Home() {
           </div>
           <nav style={{ display: 'flex', gap: 28, alignItems: 'center' }}>
             {[
-              { label: 'Pokémon', action: () => navigate('/catalogo/pokemon') },
-              { label: 'Deportes', action: () => navigate('/catalogo/deportes') },
+              { label: 'Catálogo', action: () => navigate('/catalogo') },
               { label: 'Rifas', action: () => navigate('/rifas') },
               { label: 'Blog', action: () => {} },
               { label: 'Nosotros', action: () => navigate('/nosotros') },
@@ -188,7 +187,7 @@ export default function Home() {
           }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '7px 16px', borderRadius: 100, border: `1px solid rgba(192,204,216,0.2)`, background: 'rgba(192,204,216,0.04)', marginBottom: 32 }}>
               <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#2A7A4A', boxShadow: '0 0 8px #2A7A4A' }} />
-              <span className="font-body" style={{ fontSize: 12, fontWeight: 600, color: C.acero, letterSpacing: 1 }}>POKÉMON & DEPORTES · MÉXICO</span>
+              <span className="font-body" style={{ fontSize: 12, fontWeight: 600, color: C.acero, letterSpacing: 1 }}>POKÉMON · NARUTO · ONE PIECE · DEPORTES</span>
             </div>
           </div>
 
