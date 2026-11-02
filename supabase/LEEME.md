@@ -31,3 +31,19 @@ insert into categories (parent_id, name, slug, sort_order) values (2, 'NHL', 'nh
 -- Nuevo segmento
 insert into tags (name, slug, scope, sort_order) values ('Alt Art', 'alt-art', 'pokemon', 5);
 ```
+
+## Dar de alta a un socio
+1. Supabase > **Authentication > Users > Add user > Create new user**: correo y contraseña
+   (marca "Auto Confirm User" para que no tenga que confirmar por correo).
+2. SQL Editor:
+   ```sql
+   insert into partners (user_id, name)
+   select id, 'Nombre' from auth.users where email = 'correo@ejemplo.com';
+   ```
+Solo quien esté en `partners` puede entrar al panel y editar.
+
+## Instalar el panel como app en el celular
+Abre `thecardboxmx.com/admin` (o tu dominio de Vercel) e inicia sesión.
+- **iPhone (Safari):** botón Compartir → "Agregar a pantalla de inicio".
+- **Android (Chrome):** menú ⋮ → "Instalar app" / "Agregar a pantalla principal".
+Queda un ícono "TCB Admin" que abre el panel en pantalla completa, con la sesión guardada.
