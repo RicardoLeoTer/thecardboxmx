@@ -1,5 +1,7 @@
 import React from 'react';
 import MobileMenu from '../src/components/MobileMenu.jsx';
+import { useSeo } from '../src/seo/useSeo.js';
+import { staticMeta } from '../src/seo/meta.js';
 import { useNavigate } from 'react-router-dom';
 
 const C = {
@@ -43,6 +45,7 @@ const PILARES = [
 
 export default function Rifas() {
   const navigate = useNavigate();
+  useSeo(staticMeta('/rifas'));
   const [loaded, setLoaded] = React.useState(false);
 
   React.useEffect(() => {

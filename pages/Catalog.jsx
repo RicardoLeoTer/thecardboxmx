@@ -2,6 +2,8 @@ import React, { useState, useMemo } from 'react';
 import MobileMenu from '../src/components/MobileMenu.jsx';
 import { useNavigate, useParams, useSearchParams, Navigate } from 'react-router-dom';
 import { useCatalog } from '../src/lib/useCatalog.js';
+import { useSeo } from '../src/seo/useSeo.js';
+import { staticMeta } from '../src/seo/meta.js';
 
 function Logo({ size = 48 }) {
   return (
@@ -218,6 +220,7 @@ export default function Catalog() {
    PORTADA: buscador + tarjetas de colecciones / deportes
    ===================================================================== */
 function Hub({ items, categories, tags, loading, q, setQuery, navigate }) {
+  useSeo(staticMeta('/catalogo', categories));
   const [text, setText] = useState(q);
   React.useEffect(() => {
     const t = setTimeout(() => setQuery('q', text.trim() || null), 250);
@@ -377,6 +380,7 @@ function Section({ section, liga, items, categories, tags, loading, searchParams
   const [sortBy, setSortBy] = useState('featured');
   const tipo = searchParams.get('tipo');
   const segmento = searchParams.get('segmento');
+  useSeo(staticMeta(`/catalogo/${section}${liga ? `/${liga}` : ''}`, categories));
 
   React.useEffect(() => { setSelectedCollection('all'); setSearchQuery(''); }, [section, liga]);
 
@@ -544,6 +548,9 @@ function ProductGrid({ items, tags, showCategory }) {
 }
 
 function ProductCard({ item, tags, showCategory }) {
+  const navigate = useNavigate();
+  const href = item.slug ? `/carta/${item.slug}` : null;
+  const open = (e) => { if (!href) return; e.preventDefault(); navigate(href); };
   const tagNames = (item.tags || []).map((slug) => tags.find((t) => t.slug === slug)?.name).filter(Boolean);
   const details = [
     item.grading_company && item.grade != null ? `${item.grading_company} ${Number(item.grade)}` : null,
@@ -561,7 +568,7 @@ function ProductCard({ item, tags, showCategory }) {
       boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
       display: 'flex', flexDirection: 'column',
     }}>
-      <div style={{ height: 240, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', background: `radial-gradient(circle at 50% 40%, rgba(138,111,194,0.3) 0%, transparent 65%)`, overflow: 'hidden' }}>
+      <a href={href || undefined} onClick={open} aria-label={item.name} style={{ height: 240, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', background: `radial-gradient(circle at 50% 40%, rgba(138,111,194,0.3) 0%, transparent 65%)`, overflow: 'hidden', cursor: href ? 'pointer' : 'default' }}>
         {item.cover_image
           ? <img src={item.cover_image} alt={item.name} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover' }} loading="lazy" />
           : <span style={{ fontSize: 48, opacity: 0.4 }}>🃏</span>}
@@ -569,7 +576,7 @@ function ProductCard({ item, tags, showCategory }) {
           {item.is_on_sale && <Badge color={C.oferta}>Oferta</Badge>}
           {tagNames.map((n) => <Badge key={n}>{n}</Badge>)}
         </div>
-      </div>
+      </a>
 
       <div style={{ padding: 16, display: 'flex', flexDirection: 'column', flex: 1 }}>
         {showCategory && item.category_name && (
@@ -578,7 +585,7 @@ function ProductCard({ item, tags, showCategory }) {
           </p>
         )}
         <h3 className="font-display" style={{ fontSize: 16, fontWeight: 600, color: '#fff', marginBottom: 4, lineHeight: 1.3 }}>
-          {item.name}
+          {href ? <a href={href} onClick={open} style={{ color: '#fff', textDecoration: 'none' }}>{item.name}</a> : item.name}
         </h3>
         {item.collection_name && (
           <p className="font-body" style={{ fontSize: 12, color: C.acero, marginBottom: 6 }}>{item.collection_name}</p>

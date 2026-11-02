@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import MobileMenu from '../src/components/MobileMenu.jsx';
 import { createGame, W, H } from '../src/arcade/pinballEngine.js';
 import { supabase } from '../src/lib/supabase.js';
+import { useSeo } from '../src/seo/useSeo.js';
+import { staticMeta } from '../src/seo/meta.js';
 
 const C = {
   platino: '#c0ccd8',
@@ -335,7 +337,8 @@ export default function Arcade() {
     setSubmit({ state: 'ok', code: codeFrom(data.id), rank, best: board.find((r) => r.ig_user === igRef.current)?.score, at: new Date() });
   };
 
-  useEffect(() => { document.title = 'Pinball TCB | The Card Box MX'; window.scrollTo(0, 0); }, []);
+  useSeo(staticMeta('/arcade'));
+  useEffect(() => { window.scrollTo(0, 0); }, []);
 
   // motor + bucle de animación
   useEffect(() => {

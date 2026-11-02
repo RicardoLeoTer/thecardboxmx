@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MobileMenu from '../src/components/MobileMenu.jsx';
+import { useSeo } from '../src/seo/useSeo.js';
+import { staticMeta } from '../src/seo/meta.js';
 import { useNavigate } from 'react-router-dom';
 
 function useReveal(options = {}) {
@@ -69,6 +71,7 @@ function Logo({ size = 48, glow = false, id }) {
 
 export default function Home() {
   const navigate = useNavigate();
+  useSeo(staticMeta('/'));
   const [scrolled, setScrolled] = React.useState(false);
   const [heroLoaded, setHeroLoaded] = React.useState(false);
 

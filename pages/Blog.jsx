@@ -3,6 +3,8 @@ import MobileMenu from '../src/components/MobileMenu.jsx';
 import { useNavigate, useParams } from 'react-router-dom';
 import { marked } from 'marked';
 import { supabase } from '../src/lib/supabase.js';
+import { useSeo } from '../src/seo/useSeo.js';
+import { staticMeta, postMeta } from '../src/seo/meta.js';
 
 const C = {
   platino: '#c0ccd8',
@@ -59,7 +61,7 @@ function usePosts() {
     if (!supabase) return;
     supabase
       .from('blog_posts')
-      .select('id, slug, title, excerpt, body_md, cover_url, category, sources, published_at, week_of')
+      .select('id, slug, title, excerpt, body_md, cover_url, category, sources, published_at, updated_at, week_of')
       .eq('status', 'publicado')
       .order('published_at', { ascending: false })
       .then(({ data, error }) => {
@@ -77,9 +79,7 @@ export default function Blog() {
   const post = slug ? posts.find((p) => p.slug === slug) : null;
 
   useEffect(() => { window.scrollTo(0, 0); }, [slug]);
-  useEffect(() => {
-    document.title = post ? `${post.title} | The Card Box MX` : 'Blog | The Card Box MX';
-  }, [post]);
+  useSeo(slug ? (post ? postMeta(post) : loading ? null : { path: `/blog/${slug}`, title: 'Artículo no encontrado | The Card Box MX', description: 'Este artículo no existe.', noindex: true }) : staticMeta('/blog'));
 
   return (
     <div style={{ background: C.negro, color: '#fff', minHeight: '100vh', fontFamily: "'Helvetica Neue', Helvetica, sans-serif", WebkitFontSmoothing: 'antialiased' }}>
