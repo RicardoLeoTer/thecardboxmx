@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import MobileMenu from '../src/components/MobileMenu.jsx';
 import { useNavigate } from 'react-router-dom';
 
 function useReveal(options = {}) {
@@ -150,24 +151,25 @@ export default function Home() {
               The Card Box
             </span>
           </div>
-          <nav style={{ display: 'flex', gap: 28, alignItems: 'center' }}>
+          <nav className="desk-nav" style={{ display: 'flex', gap: 28, alignItems: 'center' }}>
             {[
               { label: 'Catálogo', action: () => navigate('/catalogo') },
               { label: 'Rifas', action: () => navigate('/rifas') },
               { label: 'Blog', action: () => navigate('/blog') },
               { label: 'Nosotros', action: () => navigate('/nosotros') },
             ].map((l) => (
-              <span key={l.label} className="nav-link font-body" style={{ fontSize: 14, fontWeight: 500, color: C.acero, display: window.innerWidth < 640 ? 'none' : 'block', cursor: 'pointer' }} onClick={l.action}>
+              <span key={l.label} className="nav-link font-body" style={{ fontSize: 14, fontWeight: 500, color: C.acero, display: 'block', cursor: 'pointer' }} onClick={l.action}>
                 {l.label}
               </span>
             ))}
             <span className="btn btn-primary font-body" style={{
               fontSize: 13, fontWeight: 700, color: '#fff',
               background: C.azulAcento, padding: '9px 20px', borderRadius: 100, cursor: 'pointer'
-            }}>
+            }} onClick={() => document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' })}>
               Contacto
             </span>
           </nav>
+          <MobileMenu />
         </div>
       </header>
 

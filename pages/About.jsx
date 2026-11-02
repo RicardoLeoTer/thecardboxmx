@@ -1,4 +1,5 @@
 import React from 'react';
+import MobileMenu from '../src/components/MobileMenu.jsx';
 import { useNavigate } from 'react-router-dom';
 
 function Logo({ size = 48 }) {
@@ -84,7 +85,7 @@ export default function About() {
             <span className="font-display" style={{ fontSize: 16, fontWeight: 600, color: C.platino }}>The Card Box MX</span>
           </button>
 
-          <nav style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
+          <nav className="desk-nav" style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
             <button
               onClick={() => navigate('/')}
               className="font-body"
@@ -118,6 +119,7 @@ export default function About() {
               Nosotros
             </button>
           </nav>
+          <MobileMenu />
         </div>
       </header>
 
