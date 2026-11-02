@@ -1,0 +1,93 @@
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
+import { Navigate, NavLink, Route, Routes } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
+import Login from './Login'
+import Inventory from './Inventory'
+import ProductForm from './ProductForm'
+import Summary from './Summary'
+import './admin.css'
+
+const AdminCtx = createContext(null)
+export const useAdmin = () => useContext(AdminCtx)
+
+export default function AdminApp() {
+  const [session, setSession] = useState(undefined) // undefined = cargando
+  const [partner, setPartner] = useState(null) // null = cargando, false = sin acceso
+  const [lookups, setLookups] = useState({ categories: [], collections: [], partners: [], tags: [] })
+
+  useEffect(() => {
+    if (!supabase) return
+    supabase.auth.getSession().then(({ data }) => setSession(data.session))
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setSession(s))
+    return () => sub.subscription.unsubscribe()
+  }, [])
+
+  const reloadLookups = useCallback(async () => {
+    const [p, c, col, t] = await Promise.all([
+      supabase.from('partners').select('*').order('name'),
+      supabase.from('categories').select('*').order('sort_order'),
+      supabase.from('collections').select('*').order('year', { ascending: false }),
+      supabase.from('tags').select('*').eq('is_active', true).order('sort_order'),
+    ])
+    const partners = p.data ?? []
+    setLookups({ partners, categories: c.data ?? [], collections: col.data ?? [], tags: t.data ?? [] })
+    return partners
+  }, [])
+
+  useEffect(() => {
+    if (!session) {
+      setPartner(null)
+      return
+    }
+    reloadLookups().then((partners) => {
+      setPartner(partners.find((x) => x.user_id === session.user.id) ?? false)
+    })
+  }, [session, reloadLookups])
+
+  if (!supabase)
+    return (
+      <div className="adm-center">
+        <p>Falta configurar Supabase: agrega VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY (ver supabase/LEEME.md).</p>
+      </div>
+    )
+  if (session === undefined) return <div className="adm-center">Cargando…</div>
+  if (!session) return <Login />
+  if (partner === null) return <div className="adm-center">Cargando…</div>
+  if (partner === false)
+    return (
+      <div className="adm-center">
+        <p>Esta cuenta no está dada de alta como socio.</p>
+        <button className="btn" onClick={() => supabase.auth.signOut()}>Salir</button>
+      </div>
+    )
+
+  return (
+    <AdminCtx.Provider value={{ partner, ...lookups, reloadLookups }}>
+      <div className="adm">
+        <header className="adm-header">
+          <strong>The Card Box · Admin</strong>
+          <span className="adm-user">
+            {partner.name}
+            <button className="link" onClick={() => supabase.auth.signOut()}>Salir</button>
+          </span>
+        </header>
+
+        <main className="adm-main">
+          <Routes>
+            <Route index element={<Inventory />} />
+            <Route path="nuevo" element={<ProductForm />} />
+            <Route path="editar/:id" element={<ProductForm />} />
+            <Route path="resumen" element={<Summary />} />
+            <Route path="*" element={<Navigate to="." replace />} />
+          </Routes>
+        </main>
+
+        <nav className="adm-nav">
+          <NavLink to="." end>📦<span>Inventario</span></NavLink>
+          <NavLink to="nuevo" className="adm-nav-main">＋<span>Nuevo</span></NavLink>
+          <NavLink to="resumen">📊<span>Resumen</span></NavLink>
+        </nav>
+      </div>
+    </AdminCtx.Provider>
+  )
+}
