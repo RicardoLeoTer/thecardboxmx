@@ -98,7 +98,7 @@ export default function About() {
               Inicio
             </button>
             <button
-              onClick={() => navigate('/catalogo/cartas-solas')}
+              onClick={() => navigate('/catalogo')}
               className="font-body"
               style={{
                 background: 'none', border: 'none', color: C.platino, cursor: 'pointer',
@@ -234,7 +234,7 @@ export default function About() {
             Encuentra las cartas que buscas. Cartas individuales, productos cerrados, rarezas y piezas únicas.
           </p>
           <button
-            onClick={() => navigate('/catalogo/cartas-solas')}
+            onClick={() => navigate('/catalogo')}
             className="font-body"
             style={{
               fontSize: 16, fontWeight: 800, color: C.azulAcento, background: '#fff',

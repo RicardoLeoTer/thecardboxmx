@@ -1,19 +1,23 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import React, { lazy, Suspense } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from '../pages/Home.jsx';
 import Catalog from '../pages/Catalog.jsx';
 import About from '../pages/About.jsx';
+
+// El panel admin se carga solo cuando alguien entra a /admin (no pesa en la tienda)
+const AdminApp = lazy(() => import('./admin/AdminApp.jsx'));
 
 export default function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/catalogo/cartas-solas" element={<Catalog />} />
-        <Route path="/catalogo/producto-cerrado" element={<Catalog />} />
+        {/* /catalogo, /catalogo/pokemon, /catalogo/deportes/mlb, /catalogo/ofertas
+            filtros en la URL: ?tipo=singles|gradeadas|sellado  ?segmento=sir|full-art|parallel|autografo
+            /catalogo/cartas-solas y /catalogo/producto-cerrado redirigen a las nuevas */}
+        <Route path="/catalogo/*" element={<Catalog />} />
         <Route path="/nosotros" element={<About />} />
-        {/* Redirect old /catalogo to /catalogo/cartas-solas */}
-        <Route path="/catalogo" element={<Catalog />} />
+        <Route path="/admin/*" element={<Suspense fallback={null}><AdminApp /></Suspense>} />
       </Routes>
     </Router>
   );
