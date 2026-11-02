@@ -15,14 +15,18 @@ export const FALLBACK_CATEGORIES = [
 ]
 
 export const FALLBACK_TAGS = [
-  { id: 1, name: 'SIR', slug: 'sir', scope: 'pokemon', sort_order: 1 },
-  { id: 2, name: 'Illustration Rare', slug: 'ir', scope: 'pokemon', sort_order: 2 },
-  { id: 3, name: 'Full Art', slug: 'full-art', scope: 'pokemon', sort_order: 3 },
-  { id: 4, name: 'Hyper Rare / Gold', slug: 'hyper-rare', scope: 'pokemon', sort_order: 4 },
+  { id: 3, name: 'Full Art', slug: 'full-art', scope: 'pokemon', sort_order: 1 },
+  { id: 9, name: 'Vintage', slug: 'vintage', scope: 'pokemon', sort_order: 2 },
+  { id: 11, name: 'Base', slug: 'base', scope: 'all', sort_order: 3 },
+  { id: 10, name: 'Jugable', slug: 'jugable', scope: 'pokemon', sort_order: 4 },
+  { id: 12, name: 'Refractor', slug: 'refractor', scope: 'deportes', sort_order: 9 },
   { id: 5, name: 'Parallel', slug: 'parallel', scope: 'deportes', sort_order: 10 },
   { id: 6, name: 'Autógrafo', slug: 'autografo', scope: 'all', sort_order: 11 },
   { id: 7, name: 'Rookie', slug: 'rookie', scope: 'deportes', sort_order: 12 },
   { id: 8, name: 'Patch / Relic', slug: 'patch', scope: 'deportes', sort_order: 13 },
+  { id: 13, name: 'Insert', slug: 'insert', scope: 'deportes', sort_order: 14 },
+  { id: 14, name: 'Image Variation', slug: 'image-variation', scope: 'deportes', sort_order: 15 },
+  { id: 15, name: 'Case Hit', slug: 'case-hit', scope: 'deportes', sort_order: 16 },
 ]
 
 const single = (name, collection, subject, image) => ({ type: 'single', name, collection, subject, image, price: null })
