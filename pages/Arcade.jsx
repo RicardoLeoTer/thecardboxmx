@@ -47,6 +47,58 @@ function draw(ctx, g, scale) {
   // carril del lanzador
   ctx.fillStyle = 'rgba(0,0,0,0.25)'; ctx.fillRect(352, 236, 28, 452);
 
+  // outlanes más oscuros
+  ctx.fillStyle = 'rgba(0,0,0,0.28)';
+  ctx.fillRect(20, 490, 28, 230); ctx.fillRect(330, 490, 22, 230);
+
+  const blink = Math.floor(s.time / 120);
+  const pulse = (Math.sin(s.time / 160) + 1) / 2;
+
+  // foquitos de casino alrededor del arco (efecto marquesina)
+  for (let i = 0; i <= 28; i++) {
+    const a = Math.PI + 0.12 + (i * (Math.PI - 0.24)) / 28;
+    const x = 200 + 168 * Math.cos(a), y = 200 + 168 * Math.sin(a);
+    const on = (i + blink) % 4 === 0 || s.status === 'over';
+    bulb(ctx, x, y, 2.6, on ? '#ffd27a' : 'rgba(255,210,122,0.18)', on);
+  }
+  // foquitos en las paredes laterales del campo
+  for (let y = 215; y <= 300; y += 17) {
+    const on = (Math.floor(y / 17) + blink) % 3 === 0;
+    bulb(ctx, 33, y, 2.2, on ? '#ffd27a' : 'rgba(255,210,122,0.15)', on);
+    bulb(ctx, 342, y - 10, 2.2, on ? '#ffd27a' : 'rgba(255,210,122,0.15)', on);
+  }
+
+  // insertos del multiplicador
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  [2, 3, 4, 5].forEach((m, i) => {
+    const x = 161 + i * 26, y = 520;
+    const lit = s.mult >= m;
+    ctx.fillStyle = lit ? '#e05c2a' : 'rgba(224,92,42,0.12)';
+    ctx.shadowColor = '#e05c2a'; ctx.shadowBlur = lit ? 12 : 0;
+    ctx.beginPath(); ctx.moveTo(x, y - 11); ctx.lineTo(x + 11, y); ctx.lineTo(x, y + 11); ctx.lineTo(x - 11, y); ctx.closePath(); ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = lit ? '#fff' : 'rgba(255,255,255,0.35)'; ctx.font = '800 8px Manrope, sans-serif';
+    ctx.fillText(`${m}×`, x, y + 0.5);
+  });
+
+  // SHOOT AGAIN (bola salvada activa)
+  const saveOn = s.status === 'play' && s.time < s.ballSaveUntil;
+  ctx.fillStyle = saveOn && blink % 2 ? '#3fae6c' : 'rgba(63,174,108,0.14)';
+  roundRect(ctx, 168, 552, 64, 15, 7); ctx.fill();
+  ctx.fillStyle = saveOn ? '#fff' : 'rgba(255,255,255,0.3)'; ctx.font = '800 7.5px Manrope, sans-serif';
+  ctx.fillText('SHOOT AGAIN', 200, 560);
+
+  // flechas hacia el JACKPOT
+  const armed = s.saucer.armed;
+  for (let i = 0; i < 3; i++) {
+    const on = armed ? (blink + i) % 3 === 0 || pulse > 0.7 : false;
+    const x = 122 - i * 12, y = 338 - i * 11;
+    ctx.fillStyle = on ? '#ffd27a' : 'rgba(255,210,122,0.12)';
+    ctx.save(); ctx.translate(x, y); ctx.rotate(-2.4);
+    ctx.beginPath(); ctx.moveTo(7, 0); ctx.lineTo(-4, -6); ctx.lineTo(-4, 6); ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+
   // paredes
   ctx.lineCap = 'round';
   for (const w of s.walls) {
@@ -57,6 +109,35 @@ function draw(ctx, g, scale) {
     ctx.beginPath(); ctx.moveTo(w.ax, w.ay); ctx.lineTo(w.bx, w.by); ctx.stroke();
   }
   ctx.shadowBlur = 0;
+
+  // postes de goma en las guías
+  for (const [x, y] of [[48, 490], [330, 490]]) {
+    ctx.fillStyle = '#e4ecf8'; ctx.beginPath(); ctx.arc(x, y, 4.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = C.fuego; ctx.beginPath(); ctx.arc(x, y, 2, 0, Math.PI * 2); ctx.fill();
+  }
+
+  // dianas de estrella
+  for (const st of s.standups) {
+    const cy = (st.ay + st.by) / 2;
+    ctx.fillStyle = st.lit ? '#ffd27a' : '#8a6fc2';
+    ctx.shadowColor = '#ffd27a'; ctx.shadowBlur = st.lit ? 12 : 0;
+    roundRect(ctx, 24, st.ay, 7, st.by - st.ay, 2); ctx.fill();
+    ctx.shadowBlur = 0;
+    star(ctx, 44, cy, 6, st.lit ? '#ffd27a' : 'rgba(255,210,122,0.18)');
+  }
+
+  // hoyo JACKPOT
+  {
+    const sc = s.saucer;
+    const on = sc.armed || s.time < sc.flash;
+    ctx.fillStyle = '#05070b';
+    ctx.strokeStyle = on ? '#ffd27a' : C.platino; ctx.lineWidth = 2.5;
+    ctx.shadowColor = '#ffd27a'; ctx.shadowBlur = on ? 18 * (0.5 + pulse / 2) : 0;
+    ctx.beginPath(); ctx.arc(sc.x, sc.y, sc.r + 2, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = on ? '#ffd27a' : C.acero; ctx.font = '800 7px Manrope, sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('JACKPOT', sc.x, sc.y - 22);
+  }
 
   // carriles T C B
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
@@ -131,6 +212,20 @@ function draw(ctx, g, scale) {
   ctx.shadowBlur = 0;
 }
 
+function bulb(ctx, x, y, r, color, on) {
+  ctx.fillStyle = color; ctx.shadowColor = '#ffd27a'; ctx.shadowBlur = on ? 8 : 0;
+  ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
+}
+
+function star(ctx, x, y, r, color) {
+  ctx.fillStyle = color; ctx.beginPath();
+  for (let i = 0; i < 10; i++) {
+    const a = -Math.PI / 2 + (i * Math.PI) / 5, rr = i % 2 ? r * 0.45 : r;
+    ctx.lineTo(x + rr * Math.cos(a), y + rr * Math.sin(a));
+  }
+  ctx.closePath(); ctx.fill();
+}
+
 function roundRect(ctx, x, y, w, h, r) {
   ctx.beginPath();
   ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
@@ -168,7 +263,10 @@ export default function Arcade() {
     const resize = () => {
       const box = wrapRef.current.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const sc = Math.min(box.width / W, box.height / H);
+      // alto disponible = lo que queda de pantalla debajo del marcador (sin depender del tamaño actual del canvas)
+      const availH = Math.max(320, window.innerHeight - box.top - 12);
+      const availW = box.width - 16;
+      const sc = Math.min(availW / W, availH / H);
       canvas.style.width = `${W * sc}px`; canvas.style.height = `${H * sc}px`;
       canvas.width = Math.round(W * sc * dpr); canvas.height = Math.round(H * sc * dpr);
       scale = sc * dpr;
@@ -237,6 +335,13 @@ export default function Arcade() {
         .arc-nav:hover { color: ${C.platino}; }
         .arc-kbd { display: inline-block; padding: 2px 7px; border-radius: 6px; border: 1px solid rgba(192,204,216,0.3); font-size: 11px; color: ${C.platino}; }
         @media (pointer: coarse) { .only-desktop { display: none !important; } }
+        .marquee { position: relative; background: linear-gradient(180deg, #1a1408, #0b0905); border: 2px solid #6b4f1d;
+          box-shadow: 0 0 0 4px #0b0905, 0 0 24px rgba(255,190,90,0.18), inset 0 0 18px rgba(255,190,90,0.12); }
+        .marquee::before { content: ''; position: absolute; inset: -9px; border-radius: 22px; pointer-events: none;
+          background: radial-gradient(circle, #ffd27a 0 2.2px, transparent 2.6px) 0 0 / 14px 14px;
+          -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+          padding: 5px; animation: chase 0.9s steps(2) infinite; opacity: .9; }
+        @keyframes chase { 0% { background-position: 0 0; } 100% { background-position: 14px 0; } }
         @media (pointer: fine) { .only-touch { display: none !important; } }
       `}</style>
 
@@ -252,12 +357,14 @@ export default function Arcade() {
         <MobileMenu />
       </header>
 
-      {/* marcador */}
-      <div style={{ display: 'flex', justifyContent: 'center', gap: 18, padding: '10px 12px 6px', flexWrap: 'wrap', fontSize: 13 }}>
-        <Stat label="PUNTOS" value={fmt(hud.score)} big />
-        <Stat label="BOLAS" value={'●'.repeat(Math.max(0, hud.balls)) || '—'} />
-        <Stat label="MULT" value={`x${hud.mult}`} />
-        <Stat label="RÉCORD" value={fmt(Math.max(best, hud.status === 'over' ? hud.score : 0))} />
+      {/* marcador estilo marquesina */}
+      <div className="marquee" style={{ margin: '10px auto 4px', padding: '8px 16px 10px', borderRadius: 16, maxWidth: 460, width: 'calc(100% - 20px)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'flex-end', gap: 8 }}>
+          <Stat label="PUNTOS" value={fmt(hud.score)} big />
+          <Stat label="BOLAS" value={'●'.repeat(Math.max(0, hud.balls)) || '—'} />
+          <Stat label="MULT" value={`x${hud.mult}`} />
+          <Stat label="RÉCORD" value={fmt(Math.max(best, hud.status === 'over' ? hud.score : 0))} />
+        </div>
       </div>
 
       {/* mesa */}
@@ -268,7 +375,7 @@ export default function Arcade() {
         onPointerCancel={onPointerUp}
         onPointerLeave={onPointerUp}
         onContextMenu={(e) => e.preventDefault()}
-        style={{ flex: 1, minHeight: 360, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', touchAction: 'none', userSelect: 'none', WebkitUserSelect: 'none', padding: '4px 8px 8px' }}
+        style={{ position: 'relative', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', touchAction: 'none', userSelect: 'none', WebkitUserSelect: 'none', padding: '4px 8px 8px' }}
       >
         <canvas ref={canvasRef} style={{ display: 'block', borderRadius: 18, boxShadow: '0 0 0 1px rgba(192,204,216,0.12), 0 30px 80px rgba(0,0,0,0.6)' }} />
 
@@ -286,9 +393,10 @@ export default function Arcade() {
             onPointerDown={launchDown}
             onPointerUp={launchUp}
             onPointerCancel={launchUp}
-            style={{ position: 'absolute', bottom: 18, right: 14, background: C.fuego, color: '#fff', padding: '14px 18px', fontSize: 14, boxShadow: '0 8px 24px rgba(224,92,42,0.45)' }}
+            aria-label="Mantén y suelta para lanzar"
+            style={{ position: 'absolute', bottom: 70, right: 10, width: 64, height: 64, borderRadius: '50%', background: 'rgba(224,92,42,0.92)', color: '#fff', fontSize: 11, lineHeight: 1.1, boxShadow: '0 8px 24px rgba(224,92,42,0.45)', border: '2px solid rgba(255,255,255,0.35)' }}
           >
-            Mantén y suelta 🚀
+            🚀<br />LANZAR
           </button>
         )}
 
@@ -304,7 +412,7 @@ export default function Arcade() {
                 <p style={{ color: C.platino, marginBottom: 18 }}>Hiciste <b style={{ color: '#fff' }}>{fmt(hud.score)}</b> puntos{hud.score >= best && hud.score > 0 ? ' · ¡nuevo récord! 🏆' : ''}</p>
               ) : (
                 <p style={{ color: C.acero, fontSize: 14, lineHeight: 1.6, marginBottom: 18 }}>
-                  Prende las letras <b style={{ color: '#fff' }}>T·C·B</b> para subir el multiplicador y tumba los 3 sobres <b style={{ color: '#fff' }}>P·A·K</b> para el bonus.
+                  Prende <b style={{ color: '#fff' }}>T·C·B</b> para subir el multiplicador, tumba los sobres <b style={{ color: '#fff' }}>P·A·K</b> para el bonus y pega a las 3 <b style={{ color: '#ffd27a' }}>★</b> para encender el <b style={{ color: '#ffd27a' }}>JACKPOT</b>.
                 </p>
               )}
               <button className="arc-btn" onClick={restart} style={{ background: C.azulAcento, color: '#fff', padding: '14px 34px', fontSize: 16 }}>

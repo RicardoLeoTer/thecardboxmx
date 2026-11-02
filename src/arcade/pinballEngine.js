@@ -24,16 +24,24 @@ function buildTable() {
     prev = p;
   }
   walls.push(
-    seg(20, 200, 20, 720),                       // pared izquierda (llega hasta abajo como respaldo)
-    seg(20, 470, 100, 596, { kick: 420, id: 'slingL' }), // resortera izquierda
-    seg(100, 596, 128.4, 613.9, { e: 0.3 }),      // carril hacia flipper izq. (termina sobre la cara del flipper)
-    seg(352, 262, 352, 470),                      // pared derecha del campo (y del carril)
-    seg(352, 470, 300, 596, { kick: 420, id: 'slingR' }), // resortera derecha
-    seg(300, 596, 271.6, 613.9, { e: 0.3 }),      // carril hacia flipper der. (termina sobre la cara del flipper)
-    seg(352, 470, 352, 700),                      // pared del carril de lanzamiento
-    seg(380, 200, 380, 700),                      // pared exterior derecha
-    seg(352, 688, 380, 688, { e: 0.1 }),          // tope del lanzador
-    seg(352, 262, 380, 236, { e: 0.3, oneWay: true }), // compuerta: deja salir la bola, no la deja regresar
+    seg(20, 200, 20, 720),                        // pared exterior izquierda (outlane)
+    // --- lado izquierdo: inlane + resortera ---
+    seg(48, 490, 48, 575, { r: 2 }),              // guía inlane/outlane izq.
+    seg(48, 575, 128.4, 613.9, { e: 0.3 }),       // inlane hacia flipper izq.
+    seg(70, 480, 106, 580, { kick: 430, id: 'slingL' }), // cara de la resortera izq.
+    seg(70, 480, 70, 545),
+    seg(70, 545, 106, 580),
+    // --- lado derecho ---
+    seg(352, 262, 352, 700),                      // pared derecha del campo (y del carril)
+    seg(330, 490, 330, 575, { r: 2 }),            // guía inlane/outlane der.
+    seg(330, 575, 271.6, 613.9, { e: 0.3 }),      // inlane hacia flipper der.
+    seg(310, 480, 294, 580, { kick: 430, id: 'slingR' }), // cara de la resortera der.
+    seg(310, 480, 310, 545),
+    seg(310, 545, 294, 580),
+    // --- carril de lanzamiento ---
+    seg(380, 200, 380, 700),
+    seg(352, 688, 380, 688, { e: 0.1 }),
+    seg(352, 262, 380, 236, { e: 0.3, oneWay: true }), // compuerta de salida
     // guías de los carriles T · C · B
     seg(150, 46, 150, 80, { r: 2 }),
     seg(183, 46, 183, 80, { r: 2 }),
@@ -41,9 +49,15 @@ function buildTable() {
     seg(250, 46, 250, 80, { r: 2 }),
   );
 
+  // dianas de estrella en la pared izquierda (encienden el JACKPOT)
+  const standups = [340, 385, 430].map((y) => ({ ...seg(27, y - 13, 27, y + 13, { r: 3, e: 0.5 }), lit: false }));
+
+  // hoyo JACKPOT (atrapa y escupe la bola)
+  const saucer = { x: 80, y: 300, r: 12, armed: false, holdUntil: 0, holding: false, flash: 0 };
+
   const bumpers = [
-    { x: 130, y: 250, r: 24, icon: '⚽', flash: 0 },
-    { x: 270, y: 250, r: 24, icon: '🏀', flash: 0 },
+    { x: 135, y: 250, r: 24, icon: '⚽', flash: 0 },
+    { x: 265, y: 250, r: 24, icon: '🏀', flash: 0 },
     { x: 200, y: 330, r: 26, icon: '◆', flash: 0 },
     { x: 200, y: 205, r: 18, icon: '⚾', flash: 0 },
   ];
@@ -61,9 +75,10 @@ function buildTable() {
   const flippers = [
     { side: 'L', px: 125, py: 620, len: 66, rest: 0.5, up: -0.5, a: 0.5, w: 0, r: 7 },
     { side: 'R', px: 275, py: 620, len: 66, rest: Math.PI - 0.5, up: Math.PI + 0.5, a: Math.PI - 0.5, w: 0, r: 7 },
+    { side: 'R', px: 344, py: 332, len: 44, rest: Math.PI - 0.2, up: Math.PI + 0.55, a: Math.PI - 0.2, w: 0, r: 5, mini: true },
   ];
 
-  return { walls, bumpers, targets, lanes, flippers };
+  return { walls, bumpers, targets, lanes, flippers, standups, saucer };
 }
 
 export function createGame({ onEvent = () => {} } = {}) {
@@ -98,6 +113,8 @@ export function createGame({ onEvent = () => {} } = {}) {
     s.score = 0; s.balls = BALLS; s.mult = 1; s.time = 0; s.saveUsed = false; s.ballSaveUntil = 0;
     s.lanes.forEach((l) => { l.lit = false; });
     s.targets.forEach((tg) => { tg.up = true; });
+    s.standups.forEach((x) => { x.lit = false; });
+    s.saucer.armed = false; s.saucer.holding = false;
     s.message = null;
     placeInLane();
     onEvent({ type: 'reset' });
@@ -163,6 +180,18 @@ export function createGame({ onEvent = () => {} } = {}) {
     }
     prevPlunger = input.plunger;
 
+    // hoyo JACKPOT: mientras sostiene la bola, no hay física
+    const sc = s.saucer;
+    if (sc.holding) {
+      b.x = sc.x; b.y = sc.y; b.vx = 0; b.vy = 0;
+      if (s.time >= sc.holdUntil) {
+        sc.holding = false;
+        b.vx = 260 + Math.random() * 80; b.vy = 180; b.x = sc.x + sc.r + R + 2; b.y = sc.y + 4;
+        onEvent({ type: 'kickout' });
+      }
+      return;
+    }
+
     // integración
     b.vy += G * dt;
     b.x += b.vx * dt;
@@ -179,6 +208,32 @@ export function createGame({ onEvent = () => {} } = {}) {
         b.vx += nx * w.kick; b.vy += ny * w.kick;
         add(10);
         onEvent({ type: 'sling' });
+      }
+    }
+
+    // dianas de estrella
+    for (const st of s.standups) {
+      const hit = collideSeg(b, st);
+      if (hit > 60 && !st.lit) {
+        st.lit = true; add(150); onEvent({ type: 'star' });
+        if (s.standups.every((x) => x.lit) && !sc.armed) {
+          sc.armed = true; say('¡JACKPOT ENCENDIDO!'); onEvent({ type: 'armed' });
+        }
+      } else if (hit > 60) add(20);
+    }
+
+    // entrada al hoyo JACKPOT
+    {
+      const d = Math.hypot(b.x - sc.x, b.y - sc.y);
+      if (d < sc.r - 2 && Math.hypot(b.vx, b.vy) < 1300 && s.time > (sc.cooldown || 0)) {
+        sc.holding = true; sc.holdUntil = s.time + 1100; sc.cooldown = s.time + 1800; sc.flash = s.time + 1100;
+        if (sc.armed) {
+          add(5000); say(`¡JACKPOT! +${(5000 * s.mult).toLocaleString('es-MX')}`);
+          sc.armed = false; s.standups.forEach((x) => { x.lit = false; });
+          onEvent({ type: 'jackpot' });
+        } else { add(500); say('CAJA +500'); onEvent({ type: 'saucer' }); }
+        b.x = sc.x; b.y = sc.y; b.vx = 0; b.vy = 0;
+        return;
       }
     }
 
