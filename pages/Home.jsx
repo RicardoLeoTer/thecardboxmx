@@ -154,7 +154,7 @@ export default function Home() {
             {[
               { label: 'Catálogo', action: () => navigate('/catalogo') },
               { label: 'Rifas', action: () => navigate('/rifas') },
-              { label: 'Blog', action: () => {} },
+              { label: 'Blog', action: () => navigate('/blog') },
               { label: 'Nosotros', action: () => navigate('/nosotros') },
             ].map((l) => (
               <span key={l.label} className="nav-link font-body" style={{ fontSize: 14, fontWeight: 500, color: C.acero, display: window.innerWidth < 640 ? 'none' : 'block', cursor: 'pointer' }} onClick={l.action}>
