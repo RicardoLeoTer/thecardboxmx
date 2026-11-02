@@ -33,11 +33,12 @@ function Reveal({ children, delay = 0, y = 30 }) {
   );
 }
 
-function Logo({ size = 48, glow = false }) {
+function Logo({ size = 48, glow = false, id }) {
+  const uid = id || `l${String(size).replace(/[^a-z0-9]/gi, '')}`;
   return (
-    <svg viewBox="0 0 400 400" width={size} height={size}>
+    <svg viewBox="0 0 400 400" width={size} height={size} style={{ display: 'block' }}>
       <defs>
-        <linearGradient id={`lg${size}`} x1="0%" y1="0%" x2="100%" y2="100%">
+        <linearGradient id={`lg${uid}`} x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#f4f6fa" />
           <stop offset="30%" stopColor="#c0ccd8" />
           <stop offset="55%" stopColor="#e4ecf8" />
@@ -45,21 +46,21 @@ function Logo({ size = 48, glow = false }) {
           <stop offset="100%" stopColor="#ccd8e8" />
         </linearGradient>
         {glow && (
-          <filter id={`gl${size}`}>
+          <filter id={`gl${uid}`}>
             <feGaussianBlur stdDeviation="3" result="b" />
             <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
           </filter>
         )}
       </defs>
-      <g opacity="0.97" filter={glow ? `url(#gl${size})` : undefined}>
-        <circle cx="200" cy="200" r="187" fill="none" stroke={`url(#lg${size})`} strokeWidth="3" />
-        <circle cx="200" cy="200" r="181" fill="none" stroke={`url(#lg${size})`} strokeWidth="1" opacity="0.3" />
+      <g opacity="0.97" filter={glow ? `url(#gl${uid})` : undefined}>
+        <circle cx="200" cy="200" r="187" fill="none" stroke={`url(#lg${uid})`} strokeWidth="3" />
+        <circle cx="200" cy="200" r="181" fill="none" stroke={`url(#lg${uid})`} strokeWidth="1" opacity="0.3" />
         <rect x="105" y="68" width="190" height="264" rx="18" fill="rgba(13,17,23,0.85)" />
-        <rect x="109" y="72" width="182" height="256" rx="15" fill="none" stroke={`url(#lg${size})`} strokeWidth="2" />
-        <polygon points="200,92 222,122 200,148 178,122" fill={`url(#lg${size})`} />
+        <rect x="109" y="72" width="182" height="256" rx="15" fill="none" stroke={`url(#lg${uid})`} strokeWidth="2" />
+        <polygon points="200,92 222,122 200,148 178,122" fill={`url(#lg${uid})`} />
         <polygon points="200,92 222,122 200,120" fill="rgba(255,255,255,0.45)" />
-        <text x="200" y="238" textAnchor="middle" fontFamily="Georgia, serif" fontSize="50" fontWeight="900" letterSpacing="9" fill={`url(#lg${size})`}>TCB</text>
-        <text x="200" y="276" textAnchor="middle" fontFamily="Georgia, serif" fontSize="12" fontWeight="700" letterSpacing="4" fill={`url(#lg${size})`} opacity="0.85">THE CARD BOX</text>
+        <text x="200" y="238" textAnchor="middle" fontFamily="Georgia, serif" fontSize="50" fontWeight="900" letterSpacing="9" fill={`url(#lg${uid})`}>TCB</text>
+        <text x="200" y="276" textAnchor="middle" fontFamily="Georgia, serif" fontSize="12" fontWeight="700" letterSpacing="4" fill={`url(#lg${uid})`} opacity="0.85">THE CARD BOX</text>
       </g>
     </svg>
   );
@@ -112,6 +113,7 @@ export default function Home() {
         ::selection { background: ${C.azulAcento}; color: #fff; }
         @keyframes float { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-16px) rotate(2deg); } }
         @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+        @keyframes watermark-float { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-14px) scale(1.015); } }
         @keyframes pulse-ring { 0% { transform: scale(0.95); opacity: 0.5; } 50% { opacity: 0.15; } 100% { transform: scale(1.3); opacity: 0; } }
         .font-display { font-family: 'Fraunces', Georgia, serif; }
         .font-body { font-family: 'Manrope', sans-serif; }
@@ -179,6 +181,18 @@ export default function Home() {
       }}>
         <div style={{ position: 'absolute', top: '10%', left: '15%', width: 400, height: 400, borderRadius: '50%', background: `radial-gradient(circle, rgba(26,106,138,0.15) 0%, transparent 70%)`, filter: 'blur(40px)' }} />
         <div style={{ position: 'absolute', bottom: '5%', right: '10%', width: 350, height: 350, borderRadius: '50%', background: `radial-gradient(circle, rgba(138,111,194,0.12) 0%, transparent 70%)`, filter: 'blur(40px)' }} />
+
+        {/* Logo de fondo (marca de agua) */}
+        <div aria-hidden="true" className="hero-watermark" style={{
+          position: 'absolute', top: '50%', left: '50%',
+          width: 'min(820px, 115vw)', aspectRatio: '1',
+          transform: 'translate(-50%, -50%)', pointerEvents: 'none', zIndex: 1,
+          opacity: heroLoaded ? 0.09 : 0, transition: 'opacity 1.6s ease 0.2s',
+        }}>
+          <div style={{ width: '100%', height: '100%', animation: 'watermark-float 14s ease-in-out infinite' }}>
+            <Logo size="100%" id="watermark" />
+          </div>
+        </div>
 
         <div style={{ maxWidth: 860, textAlign: 'center', position: 'relative', zIndex: 2 }}>
           <div style={{
@@ -279,7 +293,9 @@ export default function Home() {
       {/* FINAL CTA */}
       <section id="contacto" style={{ padding: '120px 24px', background: C.negro, textAlign: 'center' }}>
         <Reveal>
-          <Logo size={72} glow />
+          <div style={{ width: 'clamp(150px, 32vw, 220px)', margin: '0 auto', filter: 'drop-shadow(0 0 40px rgba(192,204,216,0.18))' }}>
+            <Logo size="100%" glow id="cta" />
+          </div>
         </Reveal>
         <Reveal delay={0.1}>
           <h2 className="font-display" style={{ fontSize: 'clamp(32px, 7vw, 64px)', fontWeight: 900, color: '#fff', margin: '32px 0 20px', letterSpacing: -1.5, lineHeight: 1.05 }}>
