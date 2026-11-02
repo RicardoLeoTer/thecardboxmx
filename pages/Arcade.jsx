@@ -284,7 +284,7 @@ export default function Arcade() {
   const wrapRef = useRef(null);
   const canvasRef = useRef(null);
   const gameRef = useRef(null);
-  const [hud, setHud] = useState({ score: 0, balls: 3, mult: 1, status: 'ready', message: null });
+  const [hud, setHud] = useState({ score: 0, balls: 5, mult: 1, status: 'ready', message: null, speed: 0.9 });
   const [best, setBest] = useState(readBest);
   const [started, setStarted] = useState(false);
 
@@ -326,7 +326,7 @@ export default function Arcade() {
       if (hudTick > 0.08) {
         hudTick = 0;
         const s = g.state;
-        setHud({ score: s.score, balls: s.balls, mult: s.mult, status: s.status, message: s.message });
+        setHud({ score: s.score, balls: s.balls, mult: s.mult, status: s.status, message: s.message, speed: s.speed });
       }
       raf = requestAnimationFrame(loop);
     };
@@ -407,6 +407,7 @@ export default function Arcade() {
           <Stat label="PUNTOS" value={fmt(hud.score)} big />
           <Stat label="BOLAS" value={'●'.repeat(Math.max(0, hud.balls)) || '—'} />
           <Stat label="MULT" value={`x${hud.mult}`} />
+          <Stat label="VEL" value={hud.speed.toFixed(2)} />
           <Stat label="RÉCORD" value={fmt(Math.max(best, hud.status === 'over' ? hud.score : 0))} />
         </div>
       </div>

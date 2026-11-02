@@ -9,6 +9,10 @@ const DT = 1 / 480;       // paso fijo de física
 const MAX_SPEED = 1800;
 const BALLS = 5;
 const BALL_SAVE_MS = 5000;
+// Velocidad de la bola: empieza en 0.9 y sube poco a poco hasta 1.0
+const SPEED_START = 0.9;
+const SPEED_END = 1.0;
+const SPEED_RAMP_MS = 180000; // 3 minutos de juego activo para llegar a 1.0
 
 const seg = (ax, ay, bx, by, o = {}) => ({ ax, ay, bx, by, r: 0, e: 0.45, kick: 0, ...o });
 
@@ -106,6 +110,8 @@ export function createGame({ onEvent = () => {} } = {}) {
     plunger: 0,
     ballSaveUntil: 0,
     time: 0,
+    playMs: 0,              // tiempo con la bola en juego (para la velocidad)
+    speed: SPEED_START,
     message: null,
     messageUntil: 0,
     targetsResetAt: 0,
@@ -124,6 +130,7 @@ export function createGame({ onEvent = () => {} } = {}) {
 
   function reset() {
     s.score = 0; s.balls = BALLS; s.mult = 1; s.time = 0; s.saveUsed = false; s.ballSaveUntil = 0;
+    s.playMs = 0; s.speed = SPEED_START;
     s.lanes.forEach((l) => { l.lit = false; });
     s.targets.forEach((tg) => { tg.up = true; });
     s.standups.forEach((x) => { x.lit = false; });
@@ -198,7 +205,7 @@ export function createGame({ onEvent = () => {} } = {}) {
     // RAMPA: mientras la bola va arriba, sigue el camino a velocidad fija
     const rp = s.ramp;
     if (rp.riding) {
-      rp.dist += rp.speed * dt;
+      rp.dist += rp.speed * dt * s.speed;
       let left = rp.dist, i = 0;
       for (; i < rp.path.length - 1; i++) {
         const [ax, ay] = rp.path[i], [bx, by] = rp.path[i + 1];
@@ -233,9 +240,10 @@ export function createGame({ onEvent = () => {} } = {}) {
 
     // integración
     const prevY = b.y;
-    b.vy += G * dt;
-    b.x += b.vx * dt;
-    b.y += b.vy * dt;
+    const k = dt * s.speed; // la bola se mueve a la velocidad actual; los flippers no se alentan
+    b.vy += G * k;
+    b.x += b.vx * k;
+    b.y += b.vy * k;
 
     // entrada a la rampa: cruza la línea de entrada hacia arriba con fuerza
     {
@@ -392,7 +400,15 @@ export function createGame({ onEvent = () => {} } = {}) {
 
   function update(seconds) {
     acc += Math.min(seconds, 0.05);
-    while (acc >= DT) { physicsStep(); s.time += DT * 1000; acc -= DT; }
+    while (acc >= DT) {
+      physicsStep();
+      s.time += DT * 1000;
+      if (s.status === 'play') {
+        s.playMs += DT * 1000;
+        s.speed = SPEED_START + (SPEED_END - SPEED_START) * Math.min(1, s.playMs / SPEED_RAMP_MS);
+      }
+      acc -= DT;
+    }
     if (s.message && s.time > s.messageUntil) s.message = null;
   }
 
