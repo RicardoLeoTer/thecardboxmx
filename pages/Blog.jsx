@@ -119,6 +119,7 @@ export default function Blog() {
             <button className="nav-link hide-mobile" onClick={() => navigate('/')}>Inicio</button>
             <button className="nav-link" onClick={() => navigate('/catalogo')}>Catálogo</button>
             <button className="nav-link on" onClick={() => navigate('/blog')}>Blog</button>
+            <button className="nav-link" onClick={() => navigate('/arcade')}>Arcade</button>
             <button className="nav-link hide-mobile" onClick={() => navigate('/rifas')}>Rifas</button>
           </nav>
           <MobileMenu />

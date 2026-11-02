@@ -18,7 +18,7 @@
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 5; display: flex; justify-content: space-around;
   background: var(--card); border-top: 1px solid var(--line); padding: 6px 0 calc(6px + env(safe-area-inset-bottom));
 }
-.adm-nav a { display: flex; flex-direction: column; align-items: center; font-size: 20px; color: var(--muted); text-decoration: none; padding: 4px 12px; border-radius: 12px; }
+.adm-nav a { display: flex; flex-direction: column; align-items: center; font-size: 20px; color: var(--muted); text-decoration: none; padding: 4px 8px; border-radius: 12px; }
 .adm-nav a span { font-size: 11px; }
 .adm-nav a.active { color: var(--brand); }
 .adm-nav .adm-nav-main { background: var(--brand); color: #fff !important; }

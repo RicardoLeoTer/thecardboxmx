@@ -6,6 +6,7 @@ import Inventory from './Inventory'
 import ProductForm from './ProductForm'
 import Summary from './Summary'
 import Blog from './Blog'
+import ArcadeAdmin from './Arcade'
 import './admin.css'
 
 const AdminCtx = createContext(null)
@@ -103,6 +104,7 @@ export default function AdminApp() {
             <Route path="editar/:id" element={<ProductForm />} />
             <Route path="resumen" element={<Summary />} />
             <Route path="blog" element={<Blog />} />
+            <Route path="arcade" element={<ArcadeAdmin />} />
             <Route path="*" element={<Navigate to="." replace />} />
           </Routes>
         </main>
@@ -112,6 +114,7 @@ export default function AdminApp() {
           <NavLink to="nuevo" className="adm-nav-main">＋<span>Nuevo</span></NavLink>
           <NavLink to="resumen">📊<span>Resumen</span></NavLink>
           <NavLink to="blog">📰<span>Blog</span></NavLink>
+          <NavLink to="arcade">🎮<span>Arcade</span></NavLink>
         </nav>
       </div>
     </AdminCtx.Provider>
