@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MobileMenu from '../src/components/MobileMenu.jsx';
+import Logo from '../src/components/Logo.jsx';
 import { useSeo } from '../src/seo/useSeo.js';
 import { staticMeta } from '../src/seo/meta.js';
 import { useNavigate } from 'react-router-dom';
@@ -33,39 +34,6 @@ function Reveal({ children, delay = 0, y = 30 }) {
     >
       {children}
     </div>
-  );
-}
-
-function Logo({ size = 48, glow = false, id }) {
-  const uid = id || `l${String(size).replace(/[^a-z0-9]/gi, '')}`;
-  return (
-    <svg viewBox="0 0 400 400" width={size} height={size} style={{ display: 'block' }}>
-      <defs>
-        <linearGradient id={`lg${uid}`} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#f4f6fa" />
-          <stop offset="30%" stopColor="#c0ccd8" />
-          <stop offset="55%" stopColor="#e4ecf8" />
-          <stop offset="80%" stopColor="#7888a0" />
-          <stop offset="100%" stopColor="#ccd8e8" />
-        </linearGradient>
-        {glow && (
-          <filter id={`gl${uid}`}>
-            <feGaussianBlur stdDeviation="3" result="b" />
-            <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
-          </filter>
-        )}
-      </defs>
-      <g opacity="0.97" filter={glow ? `url(#gl${uid})` : undefined}>
-        <circle cx="200" cy="200" r="187" fill="none" stroke={`url(#lg${uid})`} strokeWidth="3" />
-        <circle cx="200" cy="200" r="181" fill="none" stroke={`url(#lg${uid})`} strokeWidth="1" opacity="0.3" />
-        <rect x="105" y="68" width="190" height="264" rx="18" fill="rgba(13,17,23,0.85)" />
-        <rect x="109" y="72" width="182" height="256" rx="15" fill="none" stroke={`url(#lg${uid})`} strokeWidth="2" />
-        <polygon points="200,92 222,122 200,148 178,122" fill={`url(#lg${uid})`} />
-        <polygon points="200,92 222,122 200,120" fill="rgba(255,255,255,0.45)" />
-        <text x="200" y="238" textAnchor="middle" fontFamily="Georgia, serif" fontSize="50" fontWeight="900" letterSpacing="9" fill={`url(#lg${uid})`}>TCB</text>
-        <text x="200" y="276" textAnchor="middle" fontFamily="Georgia, serif" fontSize="12" fontWeight="700" letterSpacing="4" fill={`url(#lg${uid})`} opacity="0.85">THE CARD BOX</text>
-      </g>
-    </svg>
   );
 }
 
