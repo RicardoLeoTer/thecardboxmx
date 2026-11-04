@@ -1,5 +1,6 @@
 import React from 'react';
 import MobileMenu from '../src/components/MobileMenu.jsx';
+import Logo from '../src/components/Logo.jsx';
 import { useSeo } from '../src/seo/useSeo.js';
 import { staticMeta } from '../src/seo/meta.js';
 import { useNavigate } from 'react-router-dom';
@@ -14,28 +15,6 @@ const C = {
   negro: '#060608',
   fuego: '#e05c2a',
 };
-
-function Logo({ size = 48 }) {
-  return (
-    <svg viewBox="0 0 400 400" width={size} height={size}>
-      <defs>
-        <linearGradient id={`rlg${size}`} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#f4f6fa" />
-          <stop offset="30%" stopColor="#c0ccd8" />
-          <stop offset="55%" stopColor="#e4ecf8" />
-          <stop offset="80%" stopColor="#7888a0" />
-          <stop offset="100%" stopColor="#ccd8e8" />
-        </linearGradient>
-      </defs>
-      <g opacity="0.97">
-        <circle cx="200" cy="200" r="187" fill="none" stroke={`url(#rlg${size})`} strokeWidth="3" />
-        <rect x="105" y="68" width="190" height="264" rx="18" fill="rgba(13,17,23,0.85)" />
-        <polygon points="200,92 222,122 200,148 178,122" fill={`url(#rlg${size})`} />
-        <text x="200" y="238" textAnchor="middle" fontFamily="Georgia, serif" fontSize="50" fontWeight="900" letterSpacing="9" fill={`url(#rlg${size})`}>TCB</text>
-      </g>
-    </svg>
-  );
-}
 
 const PILARES = [
   { icon: '🎁', title: 'Sorteos', text: 'Dinámicas en redes para llevarte cartas y producto sin costo.' },
