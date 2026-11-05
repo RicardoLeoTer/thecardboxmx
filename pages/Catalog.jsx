@@ -578,7 +578,7 @@ function ProductCard({ item, tags, showCategory }) {
     }}>
       <a href={href || undefined} onClick={open} aria-label={item.name} style={{ height: 240, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', background: `radial-gradient(circle at 50% 40%, rgba(138,111,194,0.3) 0%, transparent 65%)`, overflow: 'hidden', cursor: href ? 'pointer' : 'default' }}>
         {item.cover_image
-          ? <img src={item.cover_image} alt={item.name} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover' }} loading="lazy" />
+          ? <img src={item.cover_image} alt={item.name} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover' }} loading="lazy" decoding="async" />
           : <span style={{ fontSize: 48, opacity: 0.4 }}>🃏</span>}
         <div style={{ position: 'absolute', top: 12, left: 12, display: 'flex', flexWrap: 'wrap', gap: 6, maxWidth: 'calc(100% - 24px)' }}>
           {item.is_on_sale && <Badge color={C.oferta}>Oferta</Badge>}
