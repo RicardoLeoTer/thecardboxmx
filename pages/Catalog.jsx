@@ -330,12 +330,23 @@ function CollectionCard({ cat, stats, onClick }) {
       display: 'flex', flexDirection: 'column',
     }}>
       <div style={{
-        height: 170, width: '100%', position: 'relative', overflow: 'hidden', display: 'grid', placeItems: 'center',
+        height: 240, width: '100%', flexShrink: 0, position: 'relative', overflow: 'hidden', display: 'grid', placeItems: 'center',
         background: `radial-gradient(circle at 50% 45%, ${color}66 0%, transparent 70%), linear-gradient(160deg, ${color}33, ${C.carbon})`,
       }}>
-        {image
-          ? <img src={image} alt={cat.name} loading="lazy" style={{ height: '100%', width: '100%', objectFit: 'cover', objectPosition: 'center 30%', opacity: 0.85 }} />
-          : <span style={{ fontSize: 64, filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.5))' }}>{icon}</span>}
+        {image ? (
+          <>
+            {/* fondo: la misma foto difuminada para rellenar a los lados */}
+            <img src={image} alt="" aria-hidden="true" loading="lazy" decoding="async" style={{
+              position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover',
+              filter: 'blur(22px) saturate(1.2)', opacity: 0.45, transform: 'scale(1.15)',
+            }} />
+            {/* la carta completa, sin recortar */}
+            <img src={image} alt={cat.name} loading="lazy" decoding="async" style={{
+              position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain',
+              padding: '16px 0', boxSizing: 'border-box', filter: 'drop-shadow(0 10px 24px rgba(0,0,0,0.55))',
+            }} />
+          </>
+        ) : <span style={{ fontSize: 64, filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.5))' }}>{icon}</span>}
       </div>
       <div style={{ padding: '18px 20px 20px', display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
         <h3 className="font-display" style={{ fontSize: 22, fontWeight: 600 }}>{cat.name}</h3>
@@ -578,7 +589,7 @@ function ProductCard({ item, tags, showCategory }) {
     }}>
       <a href={href || undefined} onClick={open} aria-label={item.name} style={{ height: 240, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', background: `radial-gradient(circle at 50% 40%, rgba(138,111,194,0.3) 0%, transparent 65%)`, overflow: 'hidden', cursor: href ? 'pointer' : 'default' }}>
         {item.cover_image
-          ? <img src={item.cover_image} alt={item.name} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover' }} loading="lazy" decoding="async" />
+          ? <img src={item.cover_image} alt={item.name} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', padding: 12, boxSizing: 'border-box' }} loading="lazy" decoding="async" />
           : <span style={{ fontSize: 48, opacity: 0.4 }}>🃏</span>}
         <div style={{ position: 'absolute', top: 12, left: 12, display: 'flex', flexWrap: 'wrap', gap: 6, maxWidth: 'calc(100% - 24px)' }}>
           {item.is_on_sale && <Badge color={C.oferta}>Oferta</Badge>}
