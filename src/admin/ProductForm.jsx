@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { IMAGES_BUCKET, TYPE_LABEL, slugify, supabase } from '../lib/supabase'
+import { compressOrOriginal } from '../lib/compressImage'
 import { useAdmin } from './AdminApp'
 
 const EMPTY = {
@@ -147,9 +148,9 @@ export default function ProductForm() {
     // Subir fotos nuevas
     let order = images.length
     for (const file of files) {
-      const ext = file.name.split('.').pop()
+      const { blob, ext, type } = await compressOrOriginal(file)
       const path = `${productId}/${Date.now()}-${order}.${ext}`
-      const up = await supabase.storage.from(IMAGES_BUCKET).upload(path, file, { contentType: file.type })
+      const up = await supabase.storage.from(IMAGES_BUCKET).upload(path, blob, { contentType: type, cacheControl: '31536000' })
       if (up.error) { alert(`No se subió ${file.name}: ${up.error.message}`); continue }
       const { data: pub } = supabase.storage.from(IMAGES_BUCKET).getPublicUrl(path)
       await supabase.from('product_images').insert({ product_id: productId, url: pub.publicUrl, sort_order: order++ })

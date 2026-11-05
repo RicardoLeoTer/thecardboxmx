@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { CHANNELS, money, supabase } from '../lib/supabase'
 import { useAdmin } from './AdminApp'
+import OptimizePhotos from './OptimizePhotos'
 
 const channelLabel = Object.fromEntries(CHANNELS)
 
@@ -99,6 +100,8 @@ export default function Summary() {
           ))}
         </ul>
       </section>
+
+      <OptimizePhotos />
     </div>
   )
 }

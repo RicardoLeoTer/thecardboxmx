@@ -236,7 +236,7 @@ export default function Home() {
                   cursor: 'pointer',
                 }}>
                   <div style={{ height: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', background: `radial-gradient(circle at 50% 40%, ${card.glow} 0%, transparent 65%)`, overflow: 'hidden' }}>
-                    <img src={card.image} alt={card.name} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover', filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.4))' }} loading="lazy" />
+                    <img src={card.image} alt={card.name} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover', filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.4))' }} loading="lazy" decoding="async" />
                     <span className="font-body" style={{ position: 'absolute', top: 16, left: 16, fontSize: 11, fontWeight: 700, color: '#fff', background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)', padding: '6px 14px', borderRadius: 100, letterSpacing: 0.5, border: '1px solid rgba(255,255,255,0.15)' }}>
                       {card.tag}
                     </span>
