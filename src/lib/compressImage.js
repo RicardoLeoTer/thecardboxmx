@@ -1,6 +1,6 @@
-// Reduce una foto antes de subirla: máximo `maxSide` px por lado y WebP (o JPEG si el navegador no hace WebP).
-// Una foto de cel de ~3.5 MB queda en ~150–250 KB sin que se note en pantalla.
-export async function compressImage(blob, { maxSide = 1400, quality = 0.82 } = {}) {
+// Reduce una foto antes de subirla: máximo `maxSide` px por lado y WebP (o JPEG si el navegador no hace WebP, como Safari).
+// Una foto de cel de ~3.5 MB queda en ~150–300 KB sin que se note en pantalla.
+export async function compressImage(blob, { maxSide = 1000, quality = 0.75 } = {}) {
   const bitmap = await createImageBitmap(blob)
   const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height))
   const w = Math.round(bitmap.width * scale)
