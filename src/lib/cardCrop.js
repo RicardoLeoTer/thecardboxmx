@@ -109,7 +109,7 @@ function largestComponent(mask, w, h) {
   return best && { ...best, label }
 }
 
-function detectByRing(img) {
+export function detectByRing(img, { allowCardRatio = false } = {}) {
   const { data, width: w, height: h } = img
   // 1) modelo del fondo: marco exterior del 4%
   const ring = Math.max(2, Math.round(Math.min(w, h) * 0.04))
@@ -201,7 +201,7 @@ function detectByRing(img) {
 
   // fotos que ya vienen recortadas a la carta (proporción 63×88 ≈ 0.716): no tocarlas
   const imgRatio = Math.min(w, h) / Math.max(w, h)
-  const alreadyCropped = imgRatio > 0.69 && imgRatio < 0.735
+  const alreadyCropped = !allowCardRatio && imgRatio > 0.69 && imgRatio < 0.735
 
   let ok = true, reason = ''
   if (alreadyCropped) { ok = false; reason = 'Ya está recortada' }
@@ -242,7 +242,7 @@ export function sharpen(img, amount = 0.55, radius = 1) {
 // en cada lado se busca, desde la orilla hacia adentro, la primera línea recta
 // fuerte (borde de la mica o de la carta). Si no hay una línea clara, ese lado
 // no se recorta, así nunca se corta el borde gris de las Pokémon.
-function detectByEdges(img) {
+export function detectByEdges(img) {
   const { data, width: w, height: h } = img
   const g = new Float32Array(w * h)
   for (let p = 0; p < w * h; p++) g[p] = 0.299 * data[p * 4] + 0.587 * data[p * 4 + 1] + 0.114 * data[p * 4 + 2]
