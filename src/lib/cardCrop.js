@@ -109,7 +109,7 @@ function largestComponent(mask, w, h) {
   return best && { ...best, label }
 }
 
-export function detectCard(img) {
+function detectByRing(img) {
   const { data, width: w, height: h } = img
   // 1) modelo del fondo: marco exterior del 4%
   const ring = Math.max(2, Math.round(Math.min(w, h) * 0.04))
@@ -236,4 +236,78 @@ export function sharpen(img, amount = 0.55, radius = 1) {
     data[p * 4 + c] = clamp(Math.round(v + amount * (v - blur[p * 3 + c])), 0, 255)
   }
   return img
+}
+
+// Para fotos donde la carta llena casi todo el cuadro (lo normal con el cel):
+// en cada lado se busca, desde la orilla hacia adentro, la primera línea recta
+// fuerte (borde de la mica o de la carta). Si no hay una línea clara, ese lado
+// no se recorta, así nunca se corta el borde gris de las Pokémon.
+function detectByEdges(img) {
+  const { data, width: w, height: h } = img
+  const g = new Float32Array(w * h)
+  for (let p = 0; p < w * h; p++) g[p] = 0.299 * data[p * 4] + 0.587 * data[p * 4 + 1] + 0.114 * data[p * 4 + 2]
+  // color (para no depender solo de brillo: café vs gris)
+  const col = (p) => [data[p * 4], data[p * 4 + 1], data[p * 4 + 2]]
+  const diff = (a, b) => { const x = col(a), y = col(b); return Math.abs(x[0] - y[0]) + Math.abs(x[1] - y[1]) + Math.abs(x[2] - y[2]) }
+
+  const side = (horizontal, fromStart) => {
+    // horizontal=true -> buscamos filas (lado de arriba/abajo)
+    const n = horizontal ? h : w, span = horizontal ? w : h
+    const a = Math.round(span * 0.2), b = Math.round(span * 0.8)
+    const maxDepth = Math.round(n * 0.25)
+    const prof = new Float32Array(maxDepth)
+    for (let d = 1; d < maxDepth - 1; d++) {
+      const i0 = fromStart ? d - 1 : n - d, i1 = fromStart ? d + 1 : n - d - 2
+      let sum = 0
+      for (let t = a; t < b; t++) {
+        const p0 = horizontal ? i0 * w + t : t * w + i0
+        const p1 = horizontal ? i1 * w + t : t * w + i1
+        sum += diff(p0, p1)
+      }
+      prof[d] = sum / (b - a)
+    }
+    // umbral relativo al fondo (las primeras líneas), no al máximo: lo de adentro
+    // de la carta suele tener bordes más fuertes que la orilla y no queremos llegar ahí
+    const base = [prof[1], prof[2], prof[3], prof[4]].sort((x, y) => x - y)[1]
+    const th = Math.max(base * 2.2, base + 25, 35)
+    const cap = Math.round(n * 0.14) // nunca recortar más de 14% de un lado
+    let d = 2
+    while (d < cap && prof[d] < th) d++
+    if (d >= cap) return 0 // no hay una línea clara cerca de la orilla
+    // retrocede al inicio del escalón (máx. 3 px)
+    for (let k = 0; k < 3 && d > 1 && prof[d - 1] > th * 0.8; k++) d--
+    return Math.max(0, d - 1)
+  }
+
+  const top = side(true, true), bottom = side(true, false)
+  const left = side(false, true), right = side(false, false)
+  const x0 = left, x1 = w - right, y0 = top, y1 = h - bottom
+  const bw = x1 - x0, bh = y1 - y0
+  const mx = bw * 0.006, my = bh * 0.006
+  const box = {
+    x: clamp((x0 - mx) / w, 0, 1), y: clamp((y0 - my) / h, 0, 1),
+    w: clamp((bw + 2 * mx) / w, 0, 1), h: clamp((bh + 2 * my) / h, 0, 1),
+  }
+  box.w = Math.min(box.w, 1 - box.x); box.h = Math.min(box.h, 1 - box.y)
+  const areaFrac = box.w * box.h
+  const ratio = Math.min(bw, bh) / Math.max(bw, bh)
+  let ok = true, reason = ''
+  if (areaFrac > 0.99) { ok = false; reason = 'Ya está bien encuadrada' }
+  else if (areaFrac < 0.5 || ratio < 0.6 || ratio > 0.86) { ok = false; reason = 'No se detectó bien la carta' }
+  return { ok, reason, box, confidence: { areaFrac, ratio, sides: { top, bottom, left, right } } }
+}
+
+export function detectCard(img) {
+  const ring = detectByRing(img)
+  // con mucho fondo alrededor funciona mejor el método del marco
+  if (ring.ok && ring.confidence.areaFrac < 0.8) return ring
+  if (ring.reason === 'Ya está recortada') return ring
+  // el método de orillas solo para fotos con proporción de cámara (3:4, 2:3 o 9:16):
+  // si la foto ya fue recortada a mano, no la tocamos
+  const r = Math.min(img.width, img.height) / Math.max(img.width, img.height)
+  const cameraShot = [0.75, 0.6667, 0.5625].some((c) => Math.abs(r - c) < 0.002)
+  if (!cameraShot) return ring
+  const edges = detectByEdges(img)
+  if (edges.ok) return edges
+  return ring.ok ? ring : { ...ring, edges }
 }
