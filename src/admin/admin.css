@@ -103,3 +103,13 @@
 :is(.adm) .cover-pick.on { border-color: var(--brand); background: #eef6fa; }
 :is(.adm) .cover-strip { display: flex; gap: 6px; overflow-x: auto; margin: 8px 0 10px; }
 :is(.adm) .cover-strip img { height: 72px; border-radius: 6px; }
+
+/* Retocar fotos */
+:is(.adm) .retouch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+:is(.adm) .retouch-item { border: 2px solid var(--line); border-radius: 12px; background: #fff; padding: 6px; font: inherit; text-align: left; display: flex; flex-direction: column; gap: 4px; cursor: pointer; }
+:is(.adm) .retouch-item.on { border-color: var(--brand); background: #eef6fa; }
+:is(.adm) .retouch-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+:is(.adm) .retouch-pair img { width: 100%; aspect-ratio: 3 / 4; object-fit: contain; background: #f2f2f2; border-radius: 6px; }
+:is(.adm) .retouch-err { aspect-ratio: 3 / 4; display: grid; place-items: center; background: #f2f2f2; border-radius: 6px; color: var(--bad); }
+:is(.adm) .retouch-name { font-size: 12px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+:is(.adm) .retouch-note { font-size: 11px; color: var(--muted); }

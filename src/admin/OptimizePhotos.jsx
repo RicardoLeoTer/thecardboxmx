@@ -9,8 +9,10 @@ const LIMIT_KB = 350
 const pathOf = (url) => decodeURIComponent(url.split(`/${IMAGES_BUCKET}/`)[1].split('?')[0])
 
 async function cleanOrphans() {
-  const { data: rows } = await supabase.from('product_images').select('url')
-  const used = new Set((rows ?? []).filter((r) => r.url?.includes(`/${IMAGES_BUCKET}/`)).map((r) => pathOf(r.url)))
+  const { data: rows } = await supabase.from('product_images').select('url, original_url')
+  // también cuentan los originales guardados por "Retocar fotos" (para poder deshacer)
+  const urls = (rows ?? []).flatMap((r) => [r.url, r.original_url]).filter((u) => u?.includes(`/${IMAGES_BUCKET}/`))
+  const used = new Set(urls.map(pathOf))
   const bucket = supabase.storage.from(IMAGES_BUCKET)
   const { data: folders, error } = await bucket.list('', { limit: 1000 })
   if (error) throw error
