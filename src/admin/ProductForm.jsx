@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { IMAGES_BUCKET, TYPE_LABEL, slugify, supabase } from '../lib/supabase'
 import { compressOrOriginal } from '../lib/compressImage'
 import { useAdmin } from './AdminApp'
+import CameraCapture from './CameraCapture'
 
 const EMPTY = {
   type: 'single',
@@ -45,6 +46,7 @@ export default function ProductForm() {
   const [f, setF] = useState({ ...EMPTY, owner_id: partner.id })
   const [images, setImages] = useState([]) // existentes
   const [files, setFiles] = useState([]) // nuevas
+  const [camera, setCamera] = useState(false)
   const [saving, setSaving] = useState(false)
   const [newCol, setNewCol] = useState(null) // { name, year }
   const [tagIds, setTagIds] = useState([])
@@ -355,11 +357,15 @@ export default function ProductForm() {
               <button type="button" onClick={() => setFiles(files.filter((_, j) => j !== i))}>✕</button>
             </div>
           ))}
+          <button type="button" className="photo add cam-open" onClick={() => setCamera(true)}>
+            📸<span>Cámara con guía</span>
+          </button>
           <label className="photo add">
-            📷
+            🖼️<span>Galería</span>
             <input type="file" accept="image/*" multiple hidden onChange={(e) => setFiles([...files, ...e.target.files])} />
           </label>
         </div>
+        {camera && <CameraCapture onCapture={(file) => setFiles((fs) => [...fs, file])} onClose={() => setCamera(false)} />}
       </section>
 
       <div className="actions sticky">
