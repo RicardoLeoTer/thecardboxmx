@@ -8,3 +8,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <App />
   </React.StrictMode>,
 )
+
+// quita la pantalla de arranque (index.html) en cuanto React pinta la página
+requestAnimationFrame(() => {
+  const boot = document.getElementById('boot')
+  if (!boot) return
+  boot.classList.add('boot-out')
+  setTimeout(() => boot.remove(), 350)
+})

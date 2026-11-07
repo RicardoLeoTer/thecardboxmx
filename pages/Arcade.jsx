@@ -432,7 +432,6 @@ export default function Arcade() {
   return (
     <div style={{ background: C.negro, color: '#fff', minHeight: '100dvh', display: 'flex', flexDirection: 'column', fontFamily: "'Manrope', 'Helvetica Neue', sans-serif" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,900&family=Manrope:wght@500;700;800&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
         .arc-btn { border: none; border-radius: 100px; font-family: Manrope, sans-serif; font-weight: 800; cursor: pointer; }
         .arc-nav { background: none; border: none; color: ${C.acero}; font-size: 14px; font-weight: 600; cursor: pointer; }

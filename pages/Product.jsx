@@ -65,7 +65,6 @@ export default function Product() {
   return (
     <div style={{ background: C.negro, color: '#fff', minHeight: '100vh', fontFamily: "'Manrope', 'Helvetica Neue', sans-serif" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,900&family=Manrope:wght@400;500;700;800&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; }
         .font-display { font-family: 'Fraunces', Georgia, serif; }
         .nav-link { background: none; border: none; cursor: pointer; font-size: 14px; font-weight: 500; color: ${C.acero}; }
