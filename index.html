@@ -21,12 +21,30 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://rvbzgqlztqztderytxlr.supabase.co" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Manrope:wght@400;500;700;800&display=swap" />
+    <link rel="preload" as="image" href="/brand/TheCardBoxMX-logo-512.webp" type="image/webp" />
+    <style>
+      html, body { background: #060608; }
+      /* Pantalla de arranque: tapa el contenido para buscadores mientras carga la página */
+      #boot { position: fixed; inset: 0; z-index: 9999; background: radial-gradient(circle at 50% 42%, #101a2e 0%, #060608 70%);
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; transition: opacity .3s ease;
+        animation: boot-failsafe 0s linear 8s forwards; }
+      #boot img { width: 132px; height: 132px; animation: boot-pulse 1.4s ease-in-out infinite; }
+      #boot span { font: 600 13px/1 Helvetica, Arial, sans-serif; letter-spacing: 3px; text-transform: uppercase; color: #8898b0; }
+      #boot.boot-out { opacity: 0; pointer-events: none; }
+      @keyframes boot-pulse { 0%, 100% { transform: scale(1); opacity: .9; } 50% { transform: scale(1.06); opacity: 1; } }
+      /* si algo falla con el JavaScript, a los 8 s se quita sola */
+      @keyframes boot-failsafe { to { opacity: 0; visibility: hidden; } }
+      @media (prefers-reduced-motion: reduce) { #boot img { animation: none; } }
+    </style>
 
     <link rel="canonical" href="https://www.thecardboxmx.com/" />
     <meta name="robots" content="index, follow" />
     <title>The Card Box MX | Cartas y coleccionables</title>
   </head>
   <body>
+    <div id="boot" aria-hidden="true"><img src="/brand/TheCardBoxMX-logo-512.webp" alt="" /><span>Cargando</span></div>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

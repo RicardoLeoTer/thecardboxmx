@@ -63,7 +63,6 @@ export default function Blog() {
   return (
     <div style={{ background: C.negro, color: '#fff', minHeight: '100vh', fontFamily: "'Helvetica Neue', Helvetica, sans-serif", WebkitFontSmoothing: 'antialiased' }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Manrope:wght@400;500;700;800&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; }
         ::selection { background: ${C.azulAcento}; color: #fff; }
         .font-display { font-family: 'Fraunces', Georgia, serif; }

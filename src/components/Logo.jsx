@@ -5,7 +5,7 @@ import React from 'react';
 export default function Logo({ size = 48, glow = false, alt = '' }) {
   return (
     <img
-      src="/brand/TheCardBoxMX-logo.png"
+      src={typeof size === 'number' && size <= 80 ? '/brand/TheCardBoxMX-logo-160.webp' : '/brand/TheCardBoxMX-logo-512.webp'}
       alt={alt}
       width={typeof size === 'number' ? size : undefined}
       height={typeof size === 'number' ? size : undefined}
