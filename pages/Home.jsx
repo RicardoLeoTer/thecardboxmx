@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MobileMenu from '../src/components/MobileMenu.jsx';
 import Logo from '../src/components/Logo.jsx';
+import IntroCard from '../src/components/IntroCard.jsx';
 import { useSeo } from '../src/seo/useSeo.js';
 import { staticMeta } from '../src/seo/meta.js';
 import { useNavigate } from 'react-router-dom';
@@ -172,6 +173,7 @@ export default function Home() {
         </div>
 
         <div style={{ maxWidth: 860, textAlign: 'center', position: 'relative', zIndex: 2 }}>
+          <IntroCard />
           <div style={{
             opacity: heroLoaded ? 1 : 0, transform: heroLoaded ? 'translateY(0)' : 'translateY(20px)',
             transition: 'all 0.9s cubic-bezier(0.16,1,0.3,1)',
