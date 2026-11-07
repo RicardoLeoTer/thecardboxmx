@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { IMAGES_BUCKET, supabase } from '../lib/supabase'
 import { compressOrOriginal } from '../lib/compressImage'
 import { useAdmin } from './AdminApp'
@@ -98,6 +99,7 @@ export default function Covers() {
   return (
     <div>
       <h2>Portadas</h2>
+      <Link to="../retocar" className="btn" style={{ display: 'inline-block', marginBottom: 12, textDecoration: 'none' }}>✨ Retocar fotos (recorte + nitidez)</Link>
 
       <div className="card">
         <h3>Vitrina del inicio</h3>

@@ -8,6 +8,7 @@ import Summary from './Summary'
 import Blog from './Blog'
 import ArcadeAdmin from './Arcade'
 import Covers from './Covers'
+import Retouch from './Retouch'
 import './admin.css'
 
 const AdminCtx = createContext(null)
@@ -108,6 +109,7 @@ export default function AdminApp() {
             <Route path="blog" element={<Blog />} />
             <Route path="arcade" element={<ArcadeAdmin />} />
             <Route path="portadas" element={<Covers />} />
+            <Route path="retocar" element={<Retouch />} />
             <Route path="*" element={<Navigate to="." replace />} />
           </Routes>
         </main>
