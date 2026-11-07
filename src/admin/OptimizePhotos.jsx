@@ -17,6 +17,7 @@ async function cleanOrphans() {
   const orphans = []
   for (const f of folders ?? []) {
     if (f.id) continue // archivo suelto en la raíz, no carpeta
+    if (f.name === 'portadas') continue // portadas propias de colecciones (Admin → Portadas)
     const { data: files } = await bucket.list(f.name, { limit: 1000 })
     for (const file of files ?? []) {
       const p = `${f.name}/${file.name}`

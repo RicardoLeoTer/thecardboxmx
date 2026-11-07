@@ -4,6 +4,8 @@ import Logo from '../src/components/Logo.jsx';
 import { useSeo } from '../src/seo/useSeo.js';
 import { staticMeta } from '../src/seo/meta.js';
 import { useNavigate } from 'react-router-dom';
+import { useCatalog } from '../src/lib/useCatalog.js';
+import { QueBuscas, Vitrina, showcaseCss } from '../src/components/HomeShowcase.jsx';
 
 function useReveal(options = {}) {
   const ref = React.useRef(null);
@@ -39,6 +41,7 @@ function Reveal({ children, delay = 0, y = 30 }) {
 
 export default function Home() {
   const navigate = useNavigate();
+  const catalog = useCatalog();
   useSeo(staticMeta('/'));
   const [scrolled, setScrolled] = React.useState(false);
   const [heroLoaded, setHeroLoaded] = React.useState(false);
@@ -61,7 +64,7 @@ export default function Home() {
     fuego: '#e05c2a',
   };
 
-  // Top 6 featured cards (your best ones)
+  // Respaldo de la vitrina si no se puede leer el inventario
   const featured = [
     { name: 'Mega Charizard EX', set: 'Phantasmal Flames', image: '/images/MEGACHARIZARDEX.jpg', tag: 'Más buscada', glow: 'rgba(224,92,42,0.4)' },
     { name: 'Charmander', set: 'Top Sun', image: '/images/CHARMANDERTOPSUN.jpg', tag: 'Vintage', glow: 'rgba(138,111,194,0.4)' },
@@ -211,58 +214,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FEATURED CARDS */}
-      <section style={{ padding: '120px 24px', background: `linear-gradient(180deg, ${C.negro} 0%, ${C.carbon} 50%, ${C.negro} 100%)` }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <Reveal>
-            <div style={{ textAlign: 'center', marginBottom: 64 }}>
-              <span className="font-body" style={{ fontSize: 13, fontWeight: 700, color: C.azulAcento, letterSpacing: 3, textTransform: 'uppercase' }}>
-                Destacadas esta semana
-              </span>
-              <h2 className="font-display" style={{ fontSize: 'clamp(32px, 6vw, 52px)', fontWeight: 600, color: '#fff', marginTop: 16, letterSpacing: -1 }}>
-                Piezas que no duran
-              </h2>
-            </div>
-          </Reveal>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 28 }}>
-            {featured.map((card, i) => (
-              <Reveal key={i} delay={i * 0.12} y={50}>
-                <div className="card-hover" style={{
-                  borderRadius: 24, overflow: 'hidden', position: 'relative',
-                  background: `linear-gradient(165deg, ${C.azul}, ${C.carbon})`,
-                  border: '1px solid rgba(192,204,216,0.12)',
-                  boxShadow: `0 20px 60px rgba(0,0,0,0.5)`,
-                  cursor: 'pointer',
-                }}>
-                  <div style={{ height: 280, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', background: `radial-gradient(circle at 50% 40%, ${card.glow} 0%, transparent 65%)`, overflow: 'hidden' }}>
-                    <img src={card.image} alt={card.name} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover', filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.4))' }} loading="lazy" decoding="async" />
-                    <span className="font-body" style={{ position: 'absolute', top: 16, left: 16, fontSize: 11, fontWeight: 700, color: '#fff', background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)', padding: '6px 14px', borderRadius: 100, letterSpacing: 0.5, border: '1px solid rgba(255,255,255,0.15)' }}>
-                      {card.tag}
-                    </span>
-                  </div>
-                  <div style={{ padding: 24 }}>
-                    <h3 className="font-display" style={{ fontSize: 24, fontWeight: 600, color: '#fff', marginBottom: 4 }}>{card.name}</h3>
-                    <p className="font-body" style={{ fontSize: 14, color: C.acero, marginBottom: 20 }}>{card.set}</p>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span className="font-body" style={{ fontSize: 13, color: C.acero }}>Disponible</span>
-                      <a href="#contacto" className="btn font-body" style={{ fontSize: 13, fontWeight: 700, color: C.platino, border: `1px solid rgba(192,204,216,0.25)`, padding: '8px 18px', borderRadius: 100, textDecoration: 'none', display: 'inline-block' }}>
-                        Lo quiero →
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-
-          <div style={{ textAlign: 'center', marginTop: 48 }}>
-            <span className="btn btn-primary font-body" style={{ fontSize: 15, fontWeight: 700, color: '#fff', background: C.azulAcento, padding: '15px 32px', borderRadius: 100, cursor: 'pointer' }} onClick={() => navigate('/catalogo')}>
-              Ver catálogo completo →
-            </span>
-          </div>
-        </div>
-      </section>
+      {/* ¿QUÉ BUSCAS? + VITRINA (desde el inventario real) */}
+      <style>{showcaseCss}</style>
+      <QueBuscas catalog={catalog} />
+      <Vitrina catalog={catalog} fallback={featured} />
 
       {/* JUEGA Y GANA (Arcade) */}
       <section style={{ padding: '110px 24px', background: `radial-gradient(ellipse 70% 60% at 50% 40%, rgba(224,92,42,0.10) 0%, transparent 70%), ${C.negro}` }}>

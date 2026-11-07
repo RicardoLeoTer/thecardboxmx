@@ -29,6 +29,7 @@ const EMPTY = {
   is_consignment: false,
   location: '',
   is_featured: false,
+  show_on_home: false,
   sku: '',
   format_id: '',
 }
@@ -321,6 +322,7 @@ export default function ProductForm() {
         <div className="checks">
           <label><input type="checkbox" checked={f.is_consignment} onChange={set('is_consignment')} /> En consignación</label>
           <label><input type="checkbox" checked={f.is_featured} onChange={set('is_featured')} /> Destacado en la web</label>
+          <label><input type="checkbox" checked={f.show_on_home} onChange={set('show_on_home')} /> Mostrar en inicio (vitrina)</label>
         </div>
         {!id && (
           <label>Al guardar

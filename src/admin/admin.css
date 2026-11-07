@@ -91,3 +91,15 @@
 :is(.adm, .adm-center) .chips.wrap { flex-wrap: wrap; overflow: visible; }
 :is(.adm, .adm-center) .tags { display: flex; flex-wrap: wrap; gap: 4px; margin: 2px 0; }
 :is(.adm, .adm-center) .tag { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 6px; background: #ede9fe; color: #5b21b6; }
+
+/* Portadas */
+:is(.adm) .cover-row { display: flex; gap: 12px; align-items: flex-start; }
+:is(.adm) .cover-thumb { width: 72px; height: 96px; flex: 0 0 auto; border-radius: 10px; overflow: hidden; background: var(--line); display: grid; place-items: center; }
+:is(.adm) .cover-thumb img { width: 100%; height: 100%; object-fit: cover; }
+:is(.adm) .cover-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; max-height: 420px; overflow-y: auto; }
+:is(.adm) .cover-pick { border: 2px solid transparent; border-radius: 10px; padding: 4px; background: #fff; cursor: pointer; font: inherit; text-align: center; }
+:is(.adm) .cover-pick img { width: 100%; aspect-ratio: 3 / 4; object-fit: contain; display: block; }
+:is(.adm) .cover-pick span { display: block; font-size: 11px; line-height: 1.2; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+:is(.adm) .cover-pick.on { border-color: var(--brand); background: #eef6fa; }
+:is(.adm) .cover-strip { display: flex; gap: 6px; overflow-x: auto; margin: 8px 0 10px; }
+:is(.adm) .cover-strip img { height: 72px; border-radius: 6px; }
