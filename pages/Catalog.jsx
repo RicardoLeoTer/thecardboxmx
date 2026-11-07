@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { coverFor } from '../src/lib/covers.js';
 import MobileMenu from '../src/components/MobileMenu.jsx';
 import Logo from '../src/components/Logo.jsx';
 import { useNavigate, useParams, useSearchParams, Navigate } from 'react-router-dom';
@@ -224,7 +225,6 @@ function Hub({ items, categories, tags, loading, q, setQuery, navigate }) {
       total: list.length,
       singles: list.filter((i) => i.type === 'single' || i.type === 'graded').length,
       sealed: list.filter((i) => i.type === 'sealed').length,
-      cover: list.find((i) => i.is_featured && i.cover_image)?.cover_image || list.find((i) => i.cover_image)?.cover_image,
     };
   };
 
@@ -300,7 +300,7 @@ function Hub({ items, categories, tags, loading, q, setQuery, navigate }) {
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 20 }}>
                     {g.cats.map(({ cat, path }) => (
-                      <CollectionCard key={cat.slug} cat={cat} stats={statsFor(cat.slug)} onClick={() => navigate(`/catalogo/${path}`)} />
+                      <CollectionCard key={cat.slug} cat={cat} stats={{ ...statsFor(cat.slug), cover: coverFor(cat, items) }} onClick={() => navigate(`/catalogo/${path}`)} />
                     ))}
                   </div>
                 </div>
@@ -320,7 +320,7 @@ const CHIP = {
 
 function CollectionCard({ cat, stats, onClick }) {
   const [icon, color] = LOOK[cat.slug] || ['🃏', C.azulAcento];
-  const image = cat.image_url || stats.cover;
+  const image = stats.cover;
   return (
     <button onClick={onClick} className="card-hover" style={{
       textAlign: 'left', cursor: 'pointer', padding: 0, color: '#fff',
